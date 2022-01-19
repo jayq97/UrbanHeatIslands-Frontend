@@ -1,5 +1,4 @@
 import "./Map.css";
-//import React, { useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, LayersControl, LayerGroup, GeoJSON } from "react-leaflet";
 //import { Icon } from "leaflet";
 import useSwr from "swr";
@@ -12,40 +11,15 @@ import ogruen from "../data/oeffentlichGruen.json"; //später durch api aufruf e
 
 const fetcher = (...args) => fetch(...args).then(response => response.json());
 
-const Map = ({ state, district }) => {
-  let styleState;
+const Map = ({ district }) => {
+  
   var center = [48.210033, 16.363449];
-  var url = "http://localhost:8000/getData/" + district;
+  var url = "https://uhi.w3.cs.technikum-wien.at/nodejs/getData/" + district;
   const {data, error} = useSwr(url, {fetcher});
   const stations = data && !error ? data : [];
-  //const {data1, error1} = useSwr("https://www.data.gv.at/katalog/api/3/action/package_show?id=ac478f32-3e3b-4c04-bc7d-aa75069b6367", {fetcher});
-  //const {data2, error2} = useSwr("https://www.data.gv.at/katalog/api/3/action/package_show?id=ac4c2ac5-6be4-4471-bbf4-f09228f5db04", {fetcher});
-  //const gew1 = data1 && !error1 ? data1 : [];
-  //const gew2 = data2 && !error2 ? data2 : [];
-  //console.log(gew1);
-
-  
-  
-  switch (state) {
-    case "Normal":
-      break;
-    case "Heat":
-      styleState = "red";
-      break;
-    case "GreenArea":
-      styleState = "green";
-      break;
-    case "WaterArea":
-      styleState = "blue";
-      break;
-    default:
-      break;
-  }
-
-  
 
   return (
-    <div className="mapColor" style={{ backgroundColor: styleState }}>
+    
       <MapContainer
         center={center}
         zoom={14}
@@ -101,7 +75,6 @@ const Map = ({ state, district }) => {
           </Marker>
           : ""))}
         </MapContainer>
-    </div>
   );
 };
 

@@ -1,5 +1,4 @@
 import "./App.css";
-//import Button from "./components/Button/Button";
 import Header from "./components/Header/Header";
 import Map from "./components/Map/Map";
 import SelectDistrict from "./components/SelectDistrict/SelectDistrict";
