@@ -1,19 +1,18 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
-const SelectDistrict = ({district, setDistrict}) => {
-
+const SelectDistrict = ({ district, setDistrict }) => {
   const handleChange = (event) => {
     setDistrict(event.target.value);
   };
 
   return (
     <Box sx={{ minWidth: 120 }}>
-      <FormControl fullWidth>
+      <FormControl>
         <InputLabel id="demo-simple-select-label">Bezirk</InputLabel>
         <Select
           labelId="district-select-label"
