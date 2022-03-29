@@ -24,21 +24,6 @@ const Imprint = () => {
         FH-Technikum Wien:{" "}
         <a href="mailto:if20b144@technikum-wien.at">info@technikum-wien.at</a>
         <br />
-        Attila Molnar:{" "}
-        <a href="mailto:if21b198@technikum-wien.at">
-          if21b198@technikum-wien.at
-        </a>
-        <br />
-        Jay Quidet:{" "}
-        <a href="mailto:if20b144@technikum-wien.at">
-          if20b144@technikum-wien.at
-        </a>
-        <br />
-        Stefan Staudacher:{" "}
-        <a href="mailto:if20b158@technikum-wien.at">
-          if20b158@technikum-wien.at
-        </a>
-        <br />
       </p>
       <br />
       <h3>Verbraucherstreitbeilegung/ Universalschlichtungsstelle</h3>
