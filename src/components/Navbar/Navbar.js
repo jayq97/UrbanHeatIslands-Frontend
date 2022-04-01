@@ -10,7 +10,7 @@ const Navbar = () => {
       <Nav>
         <Bars />
         <NavMenu>
-          <NavLink to="/map" activeStyle>
+          <NavLink to="/" activeStyle>
             Map
           </NavLink>
           <NavLink to="/imprint" activeStyle>
@@ -21,7 +21,6 @@ const Navbar = () => {
       <Routes>
         <Route path="/" exact element={<Home />} />
         <Route path="/imprint" element={<Imprint />} />
-        <Route path="/map" element={<Home />} />
       </Routes>
     </>
   );
