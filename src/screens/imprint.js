@@ -5,7 +5,6 @@ const Imprint = () => {
     <div
       style={{
         textAlign: "left",
-        maxWidth: "75%",
       }}
       className="container"
     >

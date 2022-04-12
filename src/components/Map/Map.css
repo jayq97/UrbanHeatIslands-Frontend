@@ -8,3 +8,7 @@
   width: 100%;
   height: 700px;
 }
+.font {
+  text-align: right;
+  font-size: 0.75em;
+}

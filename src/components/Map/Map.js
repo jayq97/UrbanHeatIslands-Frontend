@@ -49,7 +49,48 @@ const Map = ({ district }) => {
             <GeoJSON data={gew2} />
           </LayerGroup>
         </LayersControl.Overlay>
-        <LayersControl.Overlay name="Heat Islands"></LayersControl.Overlay>
+        <LayersControl.Overlay name="Heat Islands">
+          <LayerGroup>
+            {stations.map((station) =>
+              station.lat &&
+              station.lon &&
+              district !== 0 &&
+              (station.temp !== null ||
+                station.windspeed !== null ||
+                station.pressure !== null) ? (
+                <Circle
+                  center={[station.lat, station.lon]}
+                  fillColor={
+                    station.temp < 10 && station.temp !== null
+                      ? "#1E90FF"
+                      : station.temp >= 10 && station.temp < 20
+                      ? "#FF8C69"
+                      : station.temp >= 20 && station.temp < 30
+                      ? "#FF3030"
+                      : station.temp > 30
+                      ? "#8B1A1A"
+                      : ""
+                  }
+                  color={
+                    station.temp < 10 && station.temp !== null
+                      ? "#1E90FF"
+                      : station.temp >= 10 && station.temp < 20
+                      ? "#FF8C69"
+                      : station.temp >= 20 && station.temp < 30
+                      ? "#FF3030"
+                      : station.temp > 30
+                      ? "#8B1A1A"
+                      : ""
+                  }
+                  radius={15 * station.temp}
+                />
+              ) : (
+                ""
+              )
+            )}
+          </LayerGroup>
+        </LayersControl.Overlay>
+
         <LayersControl.Overlay name="Bezirksgrenzen">
           <GeoJSON data={bezirke} style={{ color: "purple" }} />
         </LayersControl.Overlay>
@@ -72,7 +113,6 @@ const Map = ({ district }) => {
             key={station.station_id}
             position={[station.lat, station.lon]}
             icon={L.divIcon({
-              className: "my-custom-pin",
               iconAnchor: [0, 24],
               labelAnchor: [-6, 0],
               popupAnchor: [0, -36],
@@ -101,7 +141,7 @@ const Map = ({ district }) => {
                   ""
                 )}
                 {station.pressure !== null ? (
-                  <p>Luftdruck: {station.pressure} Pa</p>
+                  <p>Luftdruck: {station.pressure} mbar</p>
                 ) : (
                   ""
                 )}
@@ -110,6 +150,22 @@ const Map = ({ district }) => {
                 ) : (
                   ""
                 )}
+                {
+                  /*Feuchtigkeit platzhalter*/ station.windspeed !== null ? (
+                    <p>Feuchtigkeit: {station.windspeed} %</p>
+                  ) : (
+                    ""
+                  )
+                }
+                {
+                  /*Datum platzhalter*/ station.windspeed !== null ? (
+                    <p class="font">
+                      Zuletzt aktualisiert am: {station.windspeed} %
+                    </p>
+                  ) : (
+                    ""
+                  )
+                }
               </div>
             </Popup>
             {/*<Circle

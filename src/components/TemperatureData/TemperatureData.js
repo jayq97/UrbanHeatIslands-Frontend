@@ -4,11 +4,13 @@ import useSwr from "swr";
 const fetcher = (...args) => fetch(...args).then((response) => response.json());
 
 const TemperatureData = ({ district }) => {
+  //var url = "http://localhost:8000/getData/" + district + "/temp";
   var url =
     "https://uhi.w3.cs.technikum-wien.at/nodejs/getData/" + district + "/temp";
   const { data: avgTempData, error: avgTempError } = useSwr(url, { fetcher });
   const avgTemp = avgTempData && !avgTempError ? avgTempData.toFixed(2) : [];
 
+  //var url2 = "http://localhost:8000/getData/" + district;
   var url2 = "https://uhi.w3.cs.technikum-wien.at/nodejs/getData/" + district;
   const { data: stationData, error: stationError } = useSwr(url2, { fetcher });
   const stations = stationData && !stationError ? stationData : [];
