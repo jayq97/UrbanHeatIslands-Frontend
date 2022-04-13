@@ -38,18 +38,21 @@ const Map = ({ district }) => {
 
   return (
     <MapContainer center={center} zoom={14} scrollWheelZoom={true}>
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
       <LayersControl position="topright">
-        <LayersControl.Overlay name="Gewässerkarte">
-          <LayerGroup>
-            <GeoJSON data={gew1} />
-            <GeoJSON data={gew2} />
-          </LayerGroup>
-        </LayersControl.Overlay>
-        <LayersControl.Overlay name="Heat Islands">
+        <LayersControl.BaseLayer checked name="Standardeinstellung">
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+        </LayersControl.BaseLayer>
+        <LayersControl.BaseLayer name="Satellit">
+          <TileLayer
+            url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+            maxZoom={20}
+            subdomains={["mt1", "mt2", "mt3"]}
+          />
+        </LayersControl.BaseLayer>
+        <LayersControl.Overlay checked name="Heat Islands">
           <LayerGroup>
             {stations.map((station) =>
               station.lat &&
@@ -82,15 +85,58 @@ const Map = ({ district }) => {
                       ? "#8B1A1A"
                       : ""
                   }
-                  radius={15 * station.temp}
-                />
+                  radius={20 * station.temp}
+                >
+                  <Popup position={[station.lat, station.lon]} width="auto">
+                    <div>
+                      <h1>{station.neighborhood}</h1>
+                      <h2>{station.station_id}</h2>
+                      {station.windspeed !== null ? (
+                        <p>Windgeschwindigkeit: {station.windspeed} km/h</p>
+                      ) : (
+                        ""
+                      )}
+                      {station.pressure !== null ? (
+                        <p>Luftdruck: {station.pressure} mbar</p>
+                      ) : (
+                        ""
+                      )}
+                      {station.temp !== null ? (
+                        <p>Temperatur: {station.temp} °C</p>
+                      ) : (
+                        ""
+                      )}
+                      {/*
+                    Feuchtigkeit platzhalter station.windspeed !== null ? (
+                      <p>Feuchtigkeit: {station.windspeed} %</p>
+                    ) : (
+                      ""
+                    )
+                  */}
+                      {/*
+                    Datum platzhalter station.windspeed !== null ? (
+                      <p class="font">
+                        Zuletzt aktualisiert am: {station.windspeed} %
+                      </p>
+                    ) : (
+                      ""
+                    )
+                  */}
+                    </div>
+                  </Popup>
+                </Circle>
               ) : (
                 ""
               )
             )}
           </LayerGroup>
         </LayersControl.Overlay>
-
+        <LayersControl.Overlay name="Gewässerkarte">
+          <LayerGroup>
+            <GeoJSON data={gew1} />
+            <GeoJSON data={gew2} />
+          </LayerGroup>
+        </LayersControl.Overlay>
         <LayersControl.Overlay name="Bezirksgrenzen">
           <GeoJSON data={bezirke} style={{ color: "purple" }} />
         </LayersControl.Overlay>
@@ -150,30 +196,24 @@ const Map = ({ district }) => {
                 ) : (
                   ""
                 )}
-                {
-                  /*Feuchtigkeit platzhalter*/ station.windspeed !== null ? (
+                {/*
+                  Feuchtigkeit platzhalter station.windspeed !== null ? (
                     <p>Feuchtigkeit: {station.windspeed} %</p>
                   ) : (
                     ""
                   )
-                }
-                {
-                  /*Datum platzhalter*/ station.windspeed !== null ? (
+                */}
+                {/*
+                  Datum platzhalter station.windspeed !== null ? (
                     <p class="font">
                       Zuletzt aktualisiert am: {station.windspeed} %
                     </p>
                   ) : (
                     ""
                   )
-                }
+                */}
               </div>
             </Popup>
-            {/*<Circle
-              center={[station.lat, station.lon]}
-              fillColor="red"
-              color="red"
-              radius={400}
-                />*/}
           </Marker>
         ) : (
           ""
