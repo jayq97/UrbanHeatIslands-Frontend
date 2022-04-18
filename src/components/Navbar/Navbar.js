@@ -1,5 +1,5 @@
 import React from "react";
-import { Nav, NavLink, Bars, NavMenu } from "./NavbarElements";
+import { Nav, NavLink, NavMenu } from "./NavbarElements";
 import { Routes, Route } from "react-router-dom";
 import Home from "../../screens";
 import Imprint from "../../screens/imprint";

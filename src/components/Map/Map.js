@@ -27,6 +27,8 @@ import {
   MarkerNoTemp,
 } from "./MapMarkerElements";
 
+import Moment from "moment";
+
 const fetcher = (...args) => fetch(...args).then((response) => response.json());
 
 const Map = ({ district }) => {
@@ -106,22 +108,21 @@ const Map = ({ district }) => {
                       ) : (
                         ""
                       )}
-                      {/*
-                    Feuchtigkeit platzhalter station.windspeed !== null ? (
-                      <p>Feuchtigkeit: {station.windspeed} %</p>
-                    ) : (
-                      ""
-                    )
-                  */}
-                      {/*
-                    Datum platzhalter station.windspeed !== null ? (
-                      <p class="font">
-                        Zuletzt aktualisiert am: {station.windspeed} %
-                      </p>
-                    ) : (
-                      ""
-                    )
-                  */}
+                      {station.humidity !== null ? (
+                        <p>Feuchtigkeit: {station.humidity} %</p>
+                      ) : (
+                        ""
+                      )}
+                      {station.time !== null ? (
+                        <p class="font">
+                          Zuletzt aktualisiert am:{" "}
+                          {Moment(station.time).format(
+                            "DD. MMMM YYYY hh:mm:ss"
+                          )}
+                        </p>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </Popup>
                 </Circle>
@@ -196,22 +197,19 @@ const Map = ({ district }) => {
                 ) : (
                   ""
                 )}
-                {/*
-                  Feuchtigkeit platzhalter station.windspeed !== null ? (
-                    <p>Feuchtigkeit: {station.windspeed} %</p>
-                  ) : (
-                    ""
-                  )
-                */}
-                {/*
-                  Datum platzhalter station.windspeed !== null ? (
-                    <p class="font">
-                      Zuletzt aktualisiert am: {station.windspeed} %
-                    </p>
-                  ) : (
-                    ""
-                  )
-                */}
+                {station.humidity !== null ? (
+                  <p>Feuchtigkeit: {station.humidity} %</p>
+                ) : (
+                  ""
+                )}
+                {station.time !== null ? (
+                  <p class="font">
+                    Zuletzt aktualisiert am:{" "}
+                    {Moment(station.time).format("DD. MMMM YYYY hh:mm:ss")}
+                  </p>
+                ) : (
+                  ""
+                )}
               </div>
             </Popup>
           </Marker>
