@@ -28,6 +28,8 @@ import {
 } from "./MapMarkerElements";
 
 import Moment from "moment";
+import "moment/locale/de-at";
+Moment.locale("de-at");
 
 const fetcher = (...args) => fetch(...args).then((response) => response.json());
 
@@ -56,13 +58,19 @@ const Map = ({ district }) => {
         </LayersControl.BaseLayer>
         <LayersControl.Overlay checked name="Heat Islands">
           <LayerGroup>
-            {stations.map((station) =>
-              station.lat &&
-              station.lon &&
-              district !== 0 &&
-              (station.temp !== null ||
-                station.windspeed !== null ||
-                station.pressure !== null) ? (
+            {stations
+              .filter(
+                (station) =>
+                  district !== 0 &&
+                  station.lat &&
+                  station.lon &&
+                  station.temp !== null &&
+                  station.humidity !== null &&
+                  station.windspeed !== null &&
+                  station.pressure !== null &&
+                  station.time !== null
+              )
+              .map((station) => (
                 <Circle
                   center={[station.lat, station.lon]}
                   fillColor={
@@ -93,43 +101,18 @@ const Map = ({ district }) => {
                     <div>
                       <h1>{station.neighborhood}</h1>
                       <h2>{station.station_id}</h2>
-                      {station.windspeed !== null ? (
-                        <p>Windgeschwindigkeit: {station.windspeed} km/h</p>
-                      ) : (
-                        ""
-                      )}
-                      {station.pressure !== null ? (
-                        <p>Luftdruck: {station.pressure} mbar</p>
-                      ) : (
-                        ""
-                      )}
-                      {station.temp !== null ? (
-                        <p>Temperatur: {station.temp} °C</p>
-                      ) : (
-                        ""
-                      )}
-                      {station.humidity !== null ? (
-                        <p>Feuchtigkeit: {station.humidity} %</p>
-                      ) : (
-                        ""
-                      )}
-                      {station.time !== null ? (
-                        <p class="font">
-                          Zuletzt aktualisiert am:{" "}
-                          {Moment(station.time).format(
-                            "DD. MMMM YYYY hh:mm:ss"
-                          )}
-                        </p>
-                      ) : (
-                        ""
-                      )}
+                      <p>Temperatur: {station.temp} °C</p>
+                      <p>Feuchtigkeit: {station.humidity} %</p>
+                      <p>Windgeschwindigkeit: {station.windspeed} km/h</p>
+                      <p>Luftdruck: {station.pressure} mbar</p>
+                      <p class="font">
+                        Zuletzt aktualisiert am:{" "}
+                        {Moment(station.time).format("LLLL")}
+                      </p>
                     </div>
                   </Popup>
                 </Circle>
-              ) : (
-                ""
-              )
-            )}
+              ))}
           </LayerGroup>
         </LayersControl.Overlay>
         <LayersControl.Overlay name="Gewässerkarte">
@@ -148,14 +131,19 @@ const Map = ({ district }) => {
           </LayerGroup>
         </LayersControl.Overlay>
       </LayersControl>
-
-      {stations.map((station) =>
-        station.lat &&
-        station.lon &&
-        district !== 0 &&
-        (station.temp !== null ||
-          station.windspeed !== null ||
-          station.pressure !== null) ? (
+      {stations
+        .filter(
+          (station) =>
+            district !== 0 &&
+            station.lat &&
+            station.lon &&
+            station.temp !== null &&
+            station.humidity !== null &&
+            station.windspeed !== null &&
+            station.pressure !== null &&
+            station.time !== null
+        )
+        .map((station) => (
           <Marker
             key={station.station_id}
             position={[station.lat, station.lon]}
@@ -182,41 +170,17 @@ const Map = ({ district }) => {
               <div>
                 <h1>{station.neighborhood}</h1>
                 <h2>{station.station_id}</h2>
-                {station.windspeed !== null ? (
-                  <p>Windgeschwindigkeit: {station.windspeed} km/h</p>
-                ) : (
-                  ""
-                )}
-                {station.pressure !== null ? (
-                  <p>Luftdruck: {station.pressure} mbar</p>
-                ) : (
-                  ""
-                )}
-                {station.temp !== null ? (
-                  <p>Temperatur: {station.temp} °C</p>
-                ) : (
-                  ""
-                )}
-                {station.humidity !== null ? (
-                  <p>Feuchtigkeit: {station.humidity} %</p>
-                ) : (
-                  ""
-                )}
-                {station.time !== null ? (
-                  <p class="font">
-                    Zuletzt aktualisiert am:{" "}
-                    {Moment(station.time).format("DD. MMMM YYYY hh:mm:ss")}
-                  </p>
-                ) : (
-                  ""
-                )}
+                <p>Temperatur: {station.temp} °C</p>
+                <p>Feuchtigkeit: {station.humidity} %</p>
+                <p>Windgeschwindigkeit: {station.windspeed} km/h</p>
+                <p>Luftdruck: {station.pressure} mbar</p>
+                <p class="font">
+                  Zuletzt aktualisiert am: {Moment(station.time).format("LLLL")}
+                </p>
               </div>
             </Popup>
           </Marker>
-        ) : (
-          ""
-        )
-      )}
+        ))}
     </MapContainer>
   );
 };

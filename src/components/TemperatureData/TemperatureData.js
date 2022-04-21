@@ -17,7 +17,22 @@ const TemperatureData = ({ district }) => {
 
   console.log(avgTemp);
 
-  var temp = stations.map((station) => station.temp);
+  var temp = stations
+    .filter(
+      (station) =>
+        district !== 0 &&
+        station.lat &&
+        station.lon &&
+        station.temp !== null &&
+        station.humidity !== null &&
+        station.windspeed !== null &&
+        station.pressure !== null &&
+        station.time !== null
+    )
+    .map((station) => station.temp);
+
+  console.log(temp);
+
   var minTemp = Math.min(...temp);
   var maxTemp = Math.max(...temp);
 
