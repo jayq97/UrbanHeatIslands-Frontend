@@ -33,9 +33,9 @@ const TemperatureData = ({ district }) => {
 
   return (
     <div>
-      <h4>Avg. Temperatur: {avgTemp.toFixed(2)} °C</h4>
-      <h4>Min. Temperatur: {minTemp} °C</h4>
-      <h4>Max. Temperatur: {maxTemp} °C</h4>
+      <h2>Avg. Temperatur: {avgTemp.toFixed(2)} °C</h2>
+      <h2>Min. Temperatur: {minTemp} °C</h2>
+      <h2>Max. Temperatur: {maxTemp} °C</h2>
     </div>
   );
 };

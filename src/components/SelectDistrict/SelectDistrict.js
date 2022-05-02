@@ -21,7 +21,10 @@ const SelectDistrict = ({ district, setDistrict }) => {
           label="Bezirk"
           onChange={handleChange}
         >
-          <MenuItem value="all">Alle Bezirke</MenuItem>
+          <MenuItem disabled>Wähle ein Bezirk</MenuItem>
+          <MenuItem value="all" style={{ fontWeight: "bold" }}>
+            Alle Bezirke
+          </MenuItem>
           <MenuItem value="1">Innere Stadt</MenuItem>
           <MenuItem value="2">Leopoldstadt</MenuItem>
           <MenuItem value="3">Landstraße</MenuItem>

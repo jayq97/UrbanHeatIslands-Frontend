@@ -27,6 +27,16 @@ body {
   display: flex;
 }
 
+.subContainer {
+  max-width: 80%;
+  margin: 0px auto;
+  min-height: 220px;
+  border: 1px solid steelblue;
+  padding: 15px;
+  border-radius: 5px;
+  text-align: left;
+}
+
 footer {
   margin-top: 30px;
   text-align: center;
@@ -57,4 +67,8 @@ footer {
 .btn-block {
   display: block;
   width: 100%;
+}
+
+.legend {
+  width: 1px;
 }

@@ -1,4 +1,5 @@
 import "./Map.css";
+
 import {
   MapContainer,
   TileLayer,
@@ -22,7 +23,6 @@ import Gew2 from "../../data/gewässer/STEHENDEGEWOGD.json";
 import Grün1 from "../../data/grünflächen/GRUENFREIFLOGD_GRUENGEWOGD.json";
 import Grün2 from "../../data/grünflächen/OEFFGRUENFLOGD.json";
 
-import Bezirke from "../../data/bezirke/AlleBezirke.json";
 import InnereStadt from "../../data/bezirke/InnereStadt.json";
 import Leopoldstadt from "../../data/bezirke/Leopoldstadt.json";
 import Landstraße from "../../data/bezirke/Landstraße.json";
@@ -143,7 +143,7 @@ const Map = ({ district }) => {
           />
         </LayersControl.BaseLayer>
         <LayersControl.Overlay checked name="Bezirksgrenzen">
-          {district ? renderGeoJSON(district) : ""}
+          <LayerGroup>{district ? renderGeoJSON(district) : ""}</LayerGroup>
         </LayersControl.Overlay>
         <LayersControl.Overlay name="Gewässerkarte">
           <LayerGroup>
@@ -158,6 +158,7 @@ const Map = ({ district }) => {
           </LayerGroup>
         </LayersControl.Overlay>
       </LayersControl>
+
       {district
         ? stations
             .filter(
@@ -186,7 +187,7 @@ const Map = ({ district }) => {
                       ? Marker10to20
                       : station.temp >= 20 && station.temp < 30
                       ? Marker20to30
-                      : station.temp > 30
+                      : station.temp >= 30
                       ? MarkerGreater30
                       : MarkerNoTemp
                   }" />${
@@ -256,13 +257,13 @@ const renderGeoJSON = (district) => {
           key={j + 1}
           data={GeoJSONDataArray[j]}
           color={
-            AvgTempArray[j] < 15.0
+            AvgTempArray[j] < 10.0
               ? "#1E90FF"
-              : AvgTempArray[j] >= 15.0 && AvgTempArray[j] < 25.0
+              : AvgTempArray[j] >= 10.0 && AvgTempArray[j] < 20.0
               ? "#FFFF00"
-              : AvgTempArray[j] >= 25.0 && AvgTempArray[j] < 30.0
+              : AvgTempArray[j] >= 20.0 && AvgTempArray[j] < 30.0
               ? "#FF3030"
-              : AvgTempArray[j] > 30.0
+              : AvgTempArray[j] >= 30.0
               ? "#8B1A1A"
               : ""
           }
@@ -284,15 +285,15 @@ const renderGeoJSON = (district) => {
         key={district}
         data={GeoJSONDataArray[parseInt(district) - 1]}
         color={
-          AvgTempArray[parseInt(district) - 1] < 15.0
+          AvgTempArray[parseInt(district) - 1] < 10.0
             ? "#1E90FF"
-            : AvgTempArray[parseInt(district) - 1] >= 15.0 &&
-              AvgTempArray[parseInt(district) - 1] < 25.0
+            : AvgTempArray[parseInt(district) - 1] >= 10.0 &&
+              AvgTempArray[parseInt(district) - 1] < 20.0
             ? "#FFFF00"
-            : AvgTempArray[parseInt(district) - 1] >= 25.0 &&
+            : AvgTempArray[parseInt(district) - 1] >= 20.0 &&
               AvgTempArray[parseInt(district) - 1] < 30.0
             ? "#FF3030"
-            : AvgTempArray[parseInt(district) - 1] > 30.0
+            : AvgTempArray[parseInt(district) - 1] >= 30.0
             ? "#8B1A1A"
             : ""
         }
