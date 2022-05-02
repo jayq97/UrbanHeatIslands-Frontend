@@ -6,16 +6,20 @@ import TemperatureData from "../components/TemperatureData/TemperatureData";
 import { useState } from "react";
 
 const Home = () => {
-  const [district, setDistrict] = useState("1");
+  const [district, setDistrict] = useState("5");
 
   return (
     <div className="container">
       <Header />
-      <Map district={district} />
-      <br />
-      <SelectDistrict district={district} setDistrict={setDistrict} />
-      <br />
-      <TemperatureData district={district} />
+      <div className="customContainer">
+        {district && <Map district={district} />}
+        <div className="container">
+          {district && (
+            <SelectDistrict district={district} setDistrict={setDistrict} />
+          )}
+          {district && <TemperatureData district={district} />}
+        </div>
+      </div>
     </div>
   );
 };

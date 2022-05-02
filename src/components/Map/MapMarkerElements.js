@@ -12,7 +12,7 @@ export const MarkerLower10 = `
   border: 2px solid #000000`;
 
 export const Marker10to20 = `
-  background-color: #FF8C69;
+  background-color: #FFFF00;
   width: 2rem;
   height: 2rem;
   display: block;
