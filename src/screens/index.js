@@ -11,7 +11,7 @@ const Home = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setDistrict("all");
-    }, 500);
+    }, 1000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -22,30 +22,43 @@ const Home = () => {
         {district && <Map district={district} />}
         <div className="subContainer">
           {district !== "loading" ? (
-            <SelectDistrict district={district} setDistrict={setDistrict} />
+            <>
+              <SelectDistrict district={district} setDistrict={setDistrict} />
+              <TemperatureData district={district} />
+            </>
           ) : (
             <h1>Wird geladen...</h1>
-          )}
-          {district !== "loading" ? (
-            <TemperatureData district={district} />
-          ) : (
-            ""
           )}
           <br />
 
           <h2>Legende</h2>
           <p>
-            <i style={{ backgroundColor: "#8B1A1A" }}>{"⠀⠀"}</i>
-            {" >"} 30°C
+            <i style={{ backgroundColor: "#DC4B42" }}>{"⠀⠀"}</i>
+            {" >"} 35°C
           </p>
           <p>
-            <i style={{ backgroundColor: "#FF3030" }}>{"⠀⠀"}</i> 20°C - 30°C
+            <i style={{ backgroundColor: "#E37947" }}>{"⠀⠀"}</i> 30°C - 35°C
           </p>
           <p>
-            <i style={{ backgroundColor: "#FFFF00" }}>{"⠀⠀"}</i> 10°C - 20°C
+            <i style={{ backgroundColor: "#EDA84F" }}>{"⠀⠀"}</i> 25°C - 30°C
           </p>
           <p>
-            <i style={{ backgroundColor: "#1E90FF" }}>{"⠀⠀"}</i> {" <"} 10°C
+            <i style={{ backgroundColor: "#F7D65C" }}>{"⠀⠀"}</i> 20°C - 25°C
+          </p>
+          <p>
+            <i style={{ backgroundColor: "#F5EE61" }}>{"⠀⠀"}</i> 15°C - 20°C
+          </p>
+          <p>
+            <i style={{ backgroundColor: "#C9D968" }}>{"⠀⠀"}</i> 10°C - 15°C
+          </p>
+          <p>
+            <i style={{ backgroundColor: "#75B360" }}>{"⠀⠀"}</i> 5°C - 10°C
+          </p>
+          <p>
+            <i style={{ backgroundColor: "#83C18C" }}>{"⠀⠀"}</i> 0°C - 5°C
+          </p>
+          <p>
+            <i style={{ backgroundColor: "#8DD0F3" }}>{"⠀⠀"}</i> {" <"} 0°C
           </p>
           <br />
 

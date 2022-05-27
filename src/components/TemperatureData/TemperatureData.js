@@ -32,11 +32,24 @@ const TemperatureData = ({ district }) => {
   var avgTemp = sum / temp.length || 0;
 
   return (
-    <div>
-      <h2>Avg. Temperatur: {avgTemp.toFixed(2)} °C</h2>
-      <h2>Min. Temperatur: {minTemp} °C</h2>
-      <h2>Max. Temperatur: {maxTemp} °C</h2>
-    </div>
+    <>
+      <table style={{ width: "100%" }}>
+        <tr>
+          <th>Maximale Temperatur: </th>
+          <td style={{ textAlign: "right" }}>{maxTemp} °C</td>
+        </tr>
+        <tr>
+          <th>Durchschnitt Temperatur: </th>
+          <td style={{ textAlign: "right" }}>
+            {parseFloat(avgTemp.toFixed(2))} °C
+          </td>
+        </tr>
+        <tr>
+          <th>Minimale Temperatur: </th>
+          <td style={{ textAlign: "right" }}>{minTemp} °C</td>
+        </tr>
+      </table>
+    </>
   );
 };
 

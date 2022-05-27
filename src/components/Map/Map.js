@@ -8,11 +8,9 @@ import {
   LayersControl,
   LayerGroup,
   GeoJSON,
-  Circle,
 } from "react-leaflet";
 
 import React from "react";
-import { useState } from "react";
 
 import useSwr from "swr";
 import L from "leaflet";
@@ -48,10 +46,15 @@ import Donaustadt from "../../data/bezirke/Donaustadt.json";
 import Liesing from "../../data/bezirke/Liesing.json";
 
 import {
-  MarkerLower10,
-  Marker10to20,
-  Marker20to30,
-  MarkerGreater30,
+  MarkerLower0,
+  Marker0to5,
+  Marker5to10,
+  Marker10to15,
+  Marker15to20,
+  Marker20to25,
+  Marker25to30,
+  Marker30to35,
+  MarkerGreater35,
   MarkerNoTemp,
 } from "./MapMarkerElements";
 
@@ -180,17 +183,7 @@ const Map = ({ district }) => {
                   iconAnchor: [0, 24],
                   labelAnchor: [-6, 0],
                   popupAnchor: [0, -36],
-                  html: `<h2 style="${
-                    station.temp < 10
-                      ? MarkerLower10
-                      : station.temp >= 10 && station.temp < 20
-                      ? Marker10to20
-                      : station.temp >= 20 && station.temp < 30
-                      ? Marker20to30
-                      : station.temp >= 30
-                      ? MarkerGreater30
-                      : MarkerNoTemp
-                  }" />${
+                  html: `<h2 style="${renderStationColor(station.temp)}" />${
                     station.temp !== null ? Math.trunc(station.temp) : ""
                   }</h2>`,
                 })}
@@ -199,11 +192,35 @@ const Map = ({ district }) => {
                   <div>
                     <h1>{station.neighborhood}</h1>
                     <h2>{station.station_id}</h2>
-                    <p>Temperatur: {station.temp} °C</p>
-                    <p>Feuchtigkeit: {station.humidity} %</p>
-                    <p>Windgeschwindigkeit: {station.windspeed} km/h</p>
-                    <p>Luftdruck: {station.pressure} mbar</p>
-                    <p class="font">
+                    <hr width="auto" />
+                    <br />
+                    <table style={{ width: "100%" }}>
+                      <tr>
+                        <th>Temperatur: </th>
+                        <td style={{ textAlign: "right" }}>
+                          {station.temp} °C
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Feuchtigkeit: </th>
+                        <td style={{ textAlign: "right" }}>
+                          {station.humidity} %
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Windgeschwindigkeit: </th>
+                        <td style={{ textAlign: "right" }}>
+                          {station.windspeed} km/h
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Luftdruck: </th>
+                        <td style={{ textAlign: "right" }}>
+                          {station.pressure} mbar
+                        </td>
+                      </tr>
+                    </table>
+                    <p className="font">
                       Zuletzt aktualisiert am:{" "}
                       {Moment(station.time).format("LLLL")}
                     </p>
@@ -251,29 +268,53 @@ const renderGeoJSON = (district) => {
   var GeoJSONOutput = [];
 
   if (district === "all") {
-    for (var j = 0; j <= 22; j++) {
+    for (var j = 0; j < GeoJSONDataArray.length; j++) {
       GeoJSONOutput.push(
         <GeoJSON
           key={j + 1}
           data={GeoJSONDataArray[j]}
-          color={
-            AvgTempArray[j] < 10.0
-              ? "#1E90FF"
-              : AvgTempArray[j] >= 10.0 && AvgTempArray[j] < 20.0
-              ? "#FFFF00"
-              : AvgTempArray[j] >= 20.0 && AvgTempArray[j] < 30.0
-              ? "#FF3030"
-              : AvgTempArray[j] >= 30.0
-              ? "#8B1A1A"
-              : ""
-          }
+          style={{
+            fillColor: renderGeoJSONColor(AvgTempArray[j]),
+            fillOpacity: 0.6,
+            color: "#000000",
+            opacity: 1,
+            weight: 2,
+          }}
+          onEachFeature={function (feature, layer) {
+            layer.on("mouseover", function () {
+              this.setStyle({
+                fillColor: "#FFFFFF",
+                fillOpacity: 0.3,
+              });
+            });
+            layer.on("mouseout", function () {
+              this.setStyle({
+                fillColor: this.defaultOptions.style.fillColor,
+                fillOpacity: this.defaultOptions.style.fillOpacity,
+              });
+            });
+          }}
         >
           <Popup width="auto">
             <div>
               <h1>{DistrictNameArray[j]}</h1>
-              <h4>Avg. Temperatur: {AvgTempArray[j]} °C</h4>
-              <h4>Min. Temperatur: {MinTempArray[j]} °C</h4>
-              <h4>Max. Temperatur: {MaxTempArray[j]} °C</h4>
+              <h2>1{j + 1 < 10 ? "0" + parseInt(j + 1) : j + 1}0 Wien</h2>
+              <hr width="auto" />
+              <br />
+              <table style={{ width: "100%" }}>
+                <tr>
+                  <th>Maximale Temperatur: </th>
+                  <td style={{ textAlign: "right" }}>{MaxTempArray[j]} °C</td>
+                </tr>
+                <tr>
+                  <th>Durchschnitt Temperatur: </th>
+                  <td style={{ textAlign: "right" }}>{AvgTempArray[j]} °C</td>
+                </tr>
+                <tr>
+                  <th>Minimale Temperatur: </th>
+                  <td style={{ textAlign: "right" }}>{MinTempArray[j]} °C</td>
+                </tr>
+              </table>
             </div>
           </Popup>
         </GeoJSON>
@@ -284,26 +325,54 @@ const renderGeoJSON = (district) => {
       <GeoJSON
         key={district}
         data={GeoJSONDataArray[parseInt(district) - 1]}
-        color={
-          AvgTempArray[parseInt(district) - 1] < 10.0
-            ? "#1E90FF"
-            : AvgTempArray[parseInt(district) - 1] >= 10.0 &&
-              AvgTempArray[parseInt(district) - 1] < 20.0
-            ? "#FFFF00"
-            : AvgTempArray[parseInt(district) - 1] >= 20.0 &&
-              AvgTempArray[parseInt(district) - 1] < 30.0
-            ? "#FF3030"
-            : AvgTempArray[parseInt(district) - 1] >= 30.0
-            ? "#8B1A1A"
-            : ""
-        }
+        style={{
+          fillColor: renderGeoJSONColor(AvgTempArray[parseInt(district) - 1]),
+          fillOpacity: 0.6,
+          color: "#000000",
+          opacity: 1,
+          weight: 2,
+        }}
+        onEachFeature={function (feature, layer) {
+          layer.on("mouseover", function () {
+            this.setStyle({
+              fillColor: "#FFFFFF",
+              fillOpacity: 0.3,
+            });
+          });
+          layer.on("mouseout", function () {
+            this.setStyle({
+              fillColor: this.defaultOptions.style.fillColor,
+              fillOpacity: this.defaultOptions.style.fillOpacity,
+            });
+          });
+        }}
       >
         <Popup width="auto">
           <div>
             <h1>{DistrictNameArray[parseInt(district) - 1]}</h1>
-            <h4>Avg. Temperatur: {AvgTempArray[parseInt(district) - 1]} °C</h4>
-            <h4>Min. Temperatur: {MinTempArray[parseInt(district) - 1]} °C</h4>
-            <h4>Max. Temperatur: {MaxTempArray[parseInt(district) - 1]} °C</h4>
+            <h2>1{district < 10 ? "0" + district : district}0 Wien</h2>
+            <hr width="auto" />
+            <br />
+            <table style={{ width: "100%" }}>
+              <tr>
+                <th>Maximale Temperatur: </th>
+                <td style={{ textAlign: "right" }}>
+                  {MaxTempArray[parseInt(district) - 1]} °C
+                </td>
+              </tr>
+              <tr>
+                <th>Durchschnitt Temperatur: </th>
+                <td style={{ textAlign: "right" }}>
+                  {AvgTempArray[parseInt(district) - 1]} °C
+                </td>
+              </tr>
+              <tr>
+                <th>Minimale Temperatur: </th>
+                <td style={{ textAlign: "right" }}>
+                  {MinTempArray[parseInt(district) - 1]} °C
+                </td>
+              </tr>
+            </table>
           </div>
         </Popup>
       </GeoJSON>
@@ -314,4 +383,30 @@ const renderGeoJSON = (district) => {
   }
 
   return <LayerGroup>{GeoJSONOutput}</LayerGroup>;
+};
+
+const renderStationColor = (temp) => {
+  if (temp < 0) return MarkerLower0;
+  else if (temp >= 0 && temp < 5) return Marker0to5;
+  else if (temp >= 5 && temp < 10) return Marker5to10;
+  else if (temp >= 10 && temp < 15) return Marker10to15;
+  else if (temp >= 15 && temp < 20) return Marker15to20;
+  else if (temp >= 20 && temp < 25) return Marker20to25;
+  else if (temp >= 25 && temp < 30) return Marker25to30;
+  else if (temp >= 30 && temp < 35) return Marker30to35;
+  else if (temp >= 35) return MarkerGreater35;
+  else return MarkerNoTemp;
+};
+
+const renderGeoJSONColor = (temp) => {
+  if (temp < 0.0) return "#8DD0F3";
+  else if (temp >= 0.0 && temp < 5.0) return "#83C18C";
+  else if (temp >= 5.0 && temp < 10.0) return "#75B360";
+  else if (temp >= 10.0 && temp < 15.0) return "#C9D968";
+  else if (temp >= 15.0 && temp < 20.0) return "#F5EE61";
+  else if (temp >= 20.0 && temp < 25.0) return "#F7D65C";
+  else if (temp >= 25.0 && temp < 30.0) return "#EDA84F";
+  else if (temp >= 30.0 && temp < 35.0) return "#E37947";
+  else if (temp >= 35.0) return "#DC4B42";
+  else return "#FFFFFF";
 };

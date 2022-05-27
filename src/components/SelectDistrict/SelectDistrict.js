@@ -25,29 +25,29 @@ const SelectDistrict = ({ district, setDistrict }) => {
           <MenuItem value="all" style={{ fontWeight: "bold" }}>
             Alle Bezirke
           </MenuItem>
-          <MenuItem value="1">Innere Stadt</MenuItem>
-          <MenuItem value="2">Leopoldstadt</MenuItem>
-          <MenuItem value="3">Landstraße</MenuItem>
-          <MenuItem value="4">Wieden</MenuItem>
-          <MenuItem value="5">Margareten</MenuItem>
-          <MenuItem value="6">Mariahilf</MenuItem>
-          <MenuItem value="7">Neubau</MenuItem>
-          <MenuItem value="8">Josefstadt</MenuItem>
-          <MenuItem value="9">Alsergrund</MenuItem>
-          <MenuItem value="10">Favoriten</MenuItem>
-          <MenuItem value="11">Simmering</MenuItem>
-          <MenuItem value="12">Meidling</MenuItem>
-          <MenuItem value="13">Hietzing</MenuItem>
-          <MenuItem value="14">Penzing</MenuItem>
-          <MenuItem value="15">Rudolfsheim-Fünfhaus</MenuItem>
-          <MenuItem value="16">Ottakring</MenuItem>
-          <MenuItem value="17">Hernals</MenuItem>
-          <MenuItem value="18">Währing</MenuItem>
-          <MenuItem value="19">Döbling</MenuItem>
-          <MenuItem value="20">Brigittenau</MenuItem>
-          <MenuItem value="21">Floridsdorf</MenuItem>
-          <MenuItem value="22">Donaustadt</MenuItem>
-          <MenuItem value="23">Liesing</MenuItem>
+          <MenuItem value="1">(1) Innere Stadt</MenuItem>
+          <MenuItem value="2">(2) Leopoldstadt</MenuItem>
+          <MenuItem value="3">(3) Landstraße</MenuItem>
+          <MenuItem value="4">(4) Wieden</MenuItem>
+          <MenuItem value="5">(5) Margareten</MenuItem>
+          <MenuItem value="6">(6) Mariahilf</MenuItem>
+          <MenuItem value="7">(7) Neubau</MenuItem>
+          <MenuItem value="8">(8) Josefstadt</MenuItem>
+          <MenuItem value="9">(9) Alsergrund</MenuItem>
+          <MenuItem value="10">(10) Favoriten</MenuItem>
+          <MenuItem value="11">(11) Simmering</MenuItem>
+          <MenuItem value="12">(12) Meidling</MenuItem>
+          <MenuItem value="13">(13) Hietzing</MenuItem>
+          <MenuItem value="14">(14) Penzing</MenuItem>
+          <MenuItem value="15">(15) Rudolfsheim-Fünfhaus</MenuItem>
+          <MenuItem value="16">(16) Ottakring</MenuItem>
+          <MenuItem value="17">(17) Hernals</MenuItem>
+          <MenuItem value="18">(18) Währing</MenuItem>
+          <MenuItem value="19">(19) Döbling</MenuItem>
+          <MenuItem value="20">(20) Brigittenau</MenuItem>
+          <MenuItem value="21">(21) Floridsdorf</MenuItem>
+          <MenuItem value="22">(22) Donaustadt</MenuItem>
+          <MenuItem value="23">(23) Liesing</MenuItem>
         </Select>
       </FormControl>
     </Box>
