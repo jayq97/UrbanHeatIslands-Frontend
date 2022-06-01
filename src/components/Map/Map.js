@@ -10,7 +10,10 @@ import {
   GeoJSON,
 } from "react-leaflet";
 
-import React from "react";
+import Legend from "./Legend/Legend.js";
+import HeatLayer from "./HeatLayer/HeatLayer.js";
+import React, { useState } from "react";
+import "leaflet.heat";
 
 import useSwr from "swr";
 import L from "leaflet";
@@ -56,7 +59,7 @@ import {
   Marker30to35,
   MarkerGreater35,
   MarkerNoTemp,
-} from "./MapMarkerElements";
+} from "./MarkerElements/MarkerElements";
 
 import Moment from "moment";
 import "moment/locale/de-at";
@@ -123,13 +126,27 @@ const DistrictNameArray = [
 ];
 
 const Map = ({ district }) => {
-  const stations = Station(district);
+  const [map, setMap] = useState(null);
+  const stations = Station(district).filter(
+    (station) =>
+      district !== 0 &&
+      station.lat &&
+      station.lon &&
+      station.temp !== null &&
+      station.humidity !== null &&
+      station.windspeed !== null &&
+      station.pressure !== null &&
+      station.time !== null
+  );
 
   return (
     <MapContainer
       center={[48.210033, 16.363449]}
       zoom={14}
       scrollWheelZoom={true}
+      whenCreated={(map) => {
+        setMap(map);
+      }}
     >
       <LayersControl position="topright">
         <LayersControl.BaseLayer checked name="Standardeinstellung">
@@ -145,6 +162,68 @@ const Map = ({ district }) => {
             subdomains={["mt1", "mt2", "mt3"]}
           />
         </LayersControl.BaseLayer>
+
+        <LayersControl.Overlay checked name="Wetterstationen">
+          <LayerGroup>
+            {district
+              ? stations.map((station) => (
+                  <Marker
+                    key={station.station_id}
+                    position={[station.lat, station.lon]}
+                    icon={L.divIcon({
+                      iconAnchor: [0, 24],
+                      labelAnchor: [-6, 0],
+                      popupAnchor: [0, -36],
+                      html: `<h2 style="${renderStationColor(
+                        station.temp
+                      )}" />${
+                        station.temp !== null ? Math.trunc(station.temp) : ""
+                      }</h2>`,
+                    })}
+                  >
+                    <Popup position={[station.lat, station.lon]} width="auto">
+                      <div>
+                        <h1>{station.neighborhood}</h1>
+                        <h2>{station.station_id}</h2>
+                        <hr width="auto" />
+                        <br />
+                        <table style={{ width: "100%" }}>
+                          <tr>
+                            <th>Temperatur: </th>
+                            <td style={{ textAlign: "right" }}>
+                              {station.temp} °C
+                            </td>
+                          </tr>
+                          <tr>
+                            <th>Feuchtigkeit: </th>
+                            <td style={{ textAlign: "right" }}>
+                              {station.humidity} %
+                            </td>
+                          </tr>
+                          <tr>
+                            <th>Windgeschwindigkeit: </th>
+                            <td style={{ textAlign: "right" }}>
+                              {station.windspeed} km/h
+                            </td>
+                          </tr>
+                          <tr>
+                            <th>Luftdruck: </th>
+                            <td style={{ textAlign: "right" }}>
+                              {station.pressure} mbar
+                            </td>
+                          </tr>
+                        </table>
+                        <p className="font">
+                          Zuletzt aktualisiert am:{" "}
+                          {Moment(station.time).format("LLLL")}
+                        </p>
+                      </div>
+                    </Popup>
+                  </Marker>
+                ))
+              : ""}
+          </LayerGroup>
+        </LayersControl.Overlay>
         <LayersControl.Overlay checked name="Bezirksgrenzen">
           <LayerGroup>{district ? renderGeoJSON(district) : ""}</LayerGroup>
         </LayersControl.Overlay>
@@ -160,75 +239,14 @@ const Map = ({ district }) => {
             <GeoJSON data={Grün2} style={{ color: "green" }} />
           </LayerGroup>
         </LayersControl.Overlay>
+        {/*<LayersControl.Overlay name="Heat">
+          <LayerGroup>
+            <HeatLayer map={map} stations={stations} />
+          </LayerGroup>
+                  </LayersControl.Overlay>*/}
       </LayersControl>
 
-      {district
-        ? stations
-            .filter(
-              (station) =>
-                district !== 0 &&
-                station.lat &&
-                station.lon &&
-                station.temp !== null &&
-                station.humidity !== null &&
-                station.windspeed !== null &&
-                station.pressure !== null &&
-                station.time !== null
-            )
-            .map((station) => (
-              <Marker
-                key={station.station_id}
-                position={[station.lat, station.lon]}
-                icon={L.divIcon({
-                  iconAnchor: [0, 24],
-                  labelAnchor: [-6, 0],
-                  popupAnchor: [0, -36],
-                  html: `<h2 style="${renderStationColor(station.temp)}" />${
-                    station.temp !== null ? Math.trunc(station.temp) : ""
-                  }</h2>`,
-                })}
-              >
-                <Popup position={[station.lat, station.lon]} width="auto">
-                  <div>
-                    <h1>{station.neighborhood}</h1>
-                    <h2>{station.station_id}</h2>
-                    <hr width="auto" />
-                    <br />
-                    <table style={{ width: "100%" }}>
-                      <tr>
-                        <th>Temperatur: </th>
-                        <td style={{ textAlign: "right" }}>
-                          {station.temp} °C
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>Feuchtigkeit: </th>
-                        <td style={{ textAlign: "right" }}>
-                          {station.humidity} %
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>Windgeschwindigkeit: </th>
-                        <td style={{ textAlign: "right" }}>
-                          {station.windspeed} km/h
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>Luftdruck: </th>
-                        <td style={{ textAlign: "right" }}>
-                          {station.pressure} mbar
-                        </td>
-                      </tr>
-                    </table>
-                    <p className="font">
-                      Zuletzt aktualisiert am:{" "}
-                      {Moment(station.time).format("LLLL")}
-                    </p>
-                  </div>
-                </Popup>
-              </Marker>
-            ))
-        : ""}
+      <Legend map={map} />
     </MapContainer>
   );
 };
@@ -241,20 +259,19 @@ const renderGeoJSON = (district) => {
   var AvgTempArray = [];
 
   for (var i = 0; i <= 22; i++) {
-    const stations = Station(i + 1);
+    const stations = Station(i + 1).filter(
+      (station) =>
+        district !== 0 &&
+        station.lat &&
+        station.lon &&
+        station.temp !== null &&
+        station.humidity !== null &&
+        station.windspeed !== null &&
+        station.pressure !== null &&
+        station.time !== null
+    );
 
-    var temp = stations
-      .filter(
-        (station) =>
-          station.lat &&
-          station.lon &&
-          station.temp !== null &&
-          station.humidity !== null &&
-          station.windspeed !== null &&
-          station.pressure !== null &&
-          station.time !== null
-      )
-      .map((station) => parseFloat(station.temp));
+    var temp = stations.map((station) => parseFloat(station.temp));
 
     MinTempArray.push(Math.min(...temp));
     MaxTempArray.push(Math.max(...temp));
@@ -262,7 +279,7 @@ const renderGeoJSON = (district) => {
     var sum = temp.reduce((a, b) => a + b, 0);
     var avg = sum / temp.length || 0;
 
-    AvgTempArray.push(parseFloat(avg.toFixed(2)));
+    AvgTempArray.push(parseFloat(avg.toFixed(1)));
   }
 
   var GeoJSONOutput = [];

@@ -41,7 +41,7 @@ const TemperatureData = ({ district }) => {
         <tr>
           <th>Durchschnitt Temperatur: </th>
           <td style={{ textAlign: "right" }}>
-            {parseFloat(avgTemp.toFixed(2))} °C
+            {parseFloat(avgTemp.toFixed(1))} °C
           </td>
         </tr>
         <tr>
