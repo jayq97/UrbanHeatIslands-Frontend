@@ -28,7 +28,7 @@ body {
 }
 
 .subContainer {
-  max-width: 90%;
+  width: 500px;
   margin: 0px auto;
   min-height: 220px;
   border: 1px solid steelblue;

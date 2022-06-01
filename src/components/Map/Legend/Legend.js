@@ -11,7 +11,7 @@ function Legend({ map }) {
         const div = L.DomUtil.create("div", "info legend");
         div.innerHTML =
           "<h4>Legende (°C)</h4>" +
-          "<p><i style='background-color:#DC4B42;'>⠀⠀</i>>35</p>" +
+          "<p><i style='background-color:#DC4B42;'>⠀⠀</i>> 35</p>" +
           "<p><i style='background-color:#E37947;'>⠀⠀</i>30-35</p>" +
           "<p><i style='background-color:#EDA84F;'>⠀⠀</i>25-30</p>" +
           "<p><i style='background-color:#F7D65C;'>⠀⠀</i>20-25</p>" +
@@ -19,7 +19,7 @@ function Legend({ map }) {
           "<p><i style='background-color:#C9D968;'>⠀⠀</i>10-15</p>" +
           "<p><i style='background-color:#75B360;'>⠀⠀</i>5-10</p>" +
           "<p><i style='background-color:#83C18C;'>⠀⠀</i>0-5</p>" +
-          "<p><i style='background-color:#8DD0F3;'>⠀⠀</i><0</p>";
+          "<p><i style='background-color:#8DD0F3;'>⠀⠀</i>< 0</p>";
         return div;
       };
 

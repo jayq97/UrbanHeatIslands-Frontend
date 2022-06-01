@@ -24,6 +24,7 @@ import Gew2 from "../../data/gewässer/STEHENDEGEWOGD.json";
 import Grün1 from "../../data/grünflächen/GRUENFREIFLOGD_GRUENGEWOGD.json";
 import Grün2 from "../../data/grünflächen/OEFFGRUENFLOGD.json";
 
+import AlleBezirke from "../../data/bezirke/AlleBezirke.json";
 import InnereStadt from "../../data/bezirke/InnereStadt.json";
 import Leopoldstadt from "../../data/bezirke/Leopoldstadt.json";
 import Landstraße from "../../data/bezirke/Landstraße.json";
@@ -127,6 +128,8 @@ const DistrictNameArray = [
 
 const Map = ({ district }) => {
   const [map, setMap] = useState(null);
+  const [map2, setMap2] = useState(null);
+
   const stations = Station(district).filter(
     (station) =>
       district !== 0 &&
@@ -140,114 +143,164 @@ const Map = ({ district }) => {
   );
 
   return (
-    <MapContainer
-      center={[48.210033, 16.363449]}
-      zoom={14}
-      scrollWheelZoom={true}
-      whenCreated={(map) => {
-        setMap(map);
-      }}
-    >
-      <LayersControl position="topright">
-        <LayersControl.BaseLayer checked name="Standardeinstellung">
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-        </LayersControl.BaseLayer>
-        <LayersControl.BaseLayer name="Satellit">
-          <TileLayer
-            url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
-            maxZoom={20}
-            subdomains={["mt1", "mt2", "mt3"]}
-          />
-        </LayersControl.BaseLayer>
+    <>
+      <table style={{ width: "100%" }}>
+        <tr>
+          <th>
+            <MapContainer
+              center={[48.210033, 16.363449]}
+              zoom={12}
+              scrollWheelZoom={true}
+              whenCreated={(map) => {
+                setMap(map);
+              }}
+            >
+              <LayersControl position="topright">
+                <LayersControl.BaseLayer checked name="Standardeinstellung">
+                  <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                </LayersControl.BaseLayer>
+                <LayersControl.BaseLayer name="Satellit">
+                  <TileLayer
+                    url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+                    maxZoom={20}
+                    subdomains={["mt1", "mt2", "mt3"]}
+                  />
+                </LayersControl.BaseLayer>
 
-        <LayersControl.Overlay checked name="Wetterstationen">
-          <LayerGroup>
-            {district
-              ? stations.map((station) => (
-                  <Marker
-                    key={station.station_id}
-                    position={[station.lat, station.lon]}
-                    icon={L.divIcon({
-                      iconAnchor: [0, 24],
-                      labelAnchor: [-6, 0],
-                      popupAnchor: [0, -36],
-                      html: `<h2 style="${renderStationColor(
-                        station.temp
-                      )}" />${
-                        station.temp !== null ? Math.trunc(station.temp) : ""
-                      }</h2>`,
-                    })}
-                  >
-                    <Popup position={[station.lat, station.lon]} width="auto">
-                      <div>
-                        <h1>{station.neighborhood}</h1>
-                        <h2>{station.station_id}</h2>
-                        <hr width="auto" />
-                        <br />
-                        <table style={{ width: "100%" }}>
-                          <tr>
-                            <th>Temperatur: </th>
-                            <td style={{ textAlign: "right" }}>
-                              {station.temp} °C
-                            </td>
-                          </tr>
-                          <tr>
-                            <th>Feuchtigkeit: </th>
-                            <td style={{ textAlign: "right" }}>
-                              {station.humidity} %
-                            </td>
-                          </tr>
-                          <tr>
-                            <th>Windgeschwindigkeit: </th>
-                            <td style={{ textAlign: "right" }}>
-                              {station.windspeed} km/h
-                            </td>
-                          </tr>
-                          <tr>
-                            <th>Luftdruck: </th>
-                            <td style={{ textAlign: "right" }}>
-                              {station.pressure} mbar
-                            </td>
-                          </tr>
-                        </table>
-                        <p className="font">
-                          Zuletzt aktualisiert am:{" "}
-                          {Moment(station.time).format("LLLL")}
-                        </p>
-                      </div>
-                    </Popup>
-                  </Marker>
-                ))
-              : ""}
-          </LayerGroup>
-        </LayersControl.Overlay>
-        <LayersControl.Overlay checked name="Bezirksgrenzen">
-          <LayerGroup>{district ? renderGeoJSON(district) : ""}</LayerGroup>
-        </LayersControl.Overlay>
-        <LayersControl.Overlay name="Gewässerkarte">
-          <LayerGroup>
-            <GeoJSON data={Gew1} />
-            <GeoJSON data={Gew2} />
-          </LayerGroup>
-        </LayersControl.Overlay>
-        <LayersControl.Overlay name="Grüngürtel">
-          <LayerGroup>
-            <GeoJSON data={Grün1} style={{ color: "green" }} />
-            <GeoJSON data={Grün2} style={{ color: "green" }} />
-          </LayerGroup>
-        </LayersControl.Overlay>
-        {/*<LayersControl.Overlay name="Heat">
-          <LayerGroup>
-            <HeatLayer map={map} stations={stations} />
-          </LayerGroup>
-                  </LayersControl.Overlay>*/}
-      </LayersControl>
+                <LayersControl.Overlay checked name="Wetterstationen">
+                  <LayerGroup>
+                    {district
+                      ? stations.map((station) => (
+                          <Marker
+                            key={station.station_id}
+                            position={[station.lat, station.lon]}
+                            icon={L.divIcon({
+                              iconAnchor: [0, 24],
+                              labelAnchor: [-6, 0],
+                              popupAnchor: [0, -36],
+                              html: `<h2 style="${renderStationColor(
+                                station.temp
+                              )}" />${
+                                station.temp !== null
+                                  ? Math.trunc(station.temp)
+                                  : ""
+                              }</h2>`,
+                            })}
+                          >
+                            <Popup
+                              position={[station.lat, station.lon]}
+                              width="auto"
+                            >
+                              <div>
+                                <h1>{station.neighborhood}</h1>
+                                <h2>{station.station_id}</h2>
+                                <hr width="auto" />
+                                <br />
+                                <table style={{ width: "100%" }}>
+                                  <tr>
+                                    <th>Temperatur: </th>
+                                    <td style={{ textAlign: "right" }}>
+                                      {station.temp} °C
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <th>Feuchtigkeit: </th>
+                                    <td style={{ textAlign: "right" }}>
+                                      {station.humidity} %
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <th>Windgeschwindigkeit: </th>
+                                    <td style={{ textAlign: "right" }}>
+                                      {station.windspeed} km/h
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <th>Luftdruck: </th>
+                                    <td style={{ textAlign: "right" }}>
+                                      {station.pressure} mbar
+                                    </td>
+                                  </tr>
+                                </table>
+                                <p className="font">
+                                  Zuletzt aktualisiert am:{" "}
+                                  {Moment(station.time).format("LLLL")}
+                                </p>
+                              </div>
+                            </Popup>
+                          </Marker>
+                        ))
+                      : ""}
+                  </LayerGroup>
+                </LayersControl.Overlay>
+                <LayersControl.Overlay checked name="Bezirksgrenzen">
+                  <LayerGroup>
+                    {district ? renderGeoJSON(district) : ""}
+                  </LayerGroup>
+                </LayersControl.Overlay>
+                <LayersControl.Overlay name="Gewässerkarte">
+                  <LayerGroup>
+                    <GeoJSON data={Gew1} />
+                    <GeoJSON data={Gew2} />
+                  </LayerGroup>
+                </LayersControl.Overlay>
+                <LayersControl.Overlay name="Grüngürtel">
+                  <LayerGroup>
+                    <GeoJSON data={Grün1} style={{ color: "green" }} />
+                    <GeoJSON data={Grün2} style={{ color: "green" }} />
+                  </LayerGroup>
+                </LayersControl.Overlay>
+              </LayersControl>
 
-      <Legend map={map} />
-    </MapContainer>
+              <Legend map={map} />
+            </MapContainer>
+          </th>
+        </tr>
+        <tr>
+          <th>
+            <MapContainer
+              center={[48.210033, 16.363449]}
+              zoom={12}
+              scrollWheelZoom={true}
+              whenCreated={(map) => {
+                setMap2(map);
+              }}
+            >
+              <LayersControl position="topright">
+                <LayersControl.BaseLayer checked name="Standardeinstellung">
+                  <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                </LayersControl.BaseLayer>
+                <LayersControl.BaseLayer name="Satellit">
+                  <TileLayer
+                    url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+                    maxZoom={20}
+                    subdomains={["mt1", "mt2", "mt3"]}
+                  />
+                </LayersControl.BaseLayer>
+              </LayersControl>
+
+              <GeoJSON
+                data={AlleBezirke}
+                style={{
+                  fillColor: "#000000",
+                  fillOpacity: 0.1,
+                  color: "#000000",
+                  opacity: 1,
+                  weight: 2,
+                }}
+              ></GeoJSON>
+              <HeatLayer map={map2} stations={stations} />
+            </MapContainer>
+          </th>
+        </tr>
+      </table>
+    </>
   );
 };
 
