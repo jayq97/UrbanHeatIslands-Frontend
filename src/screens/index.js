@@ -1,62 +1,58 @@
 import React from "react";
 import Map from "../components/Map/Map";
 import SelectDistrict from "../components/SelectDistrict/SelectDistrict";
-import Header from "../components/Header/Header";
+import Sources from "../components/Sources/Sources";
 import TemperatureData from "../components/TemperatureData/TemperatureData";
 import { useEffect, useState } from "react";
 
+// Die Startseite beinhaltet die Map mit der zugehörigen Heatmap und die Temperaturdaten
+
 const Home = () => {
+  // Der Bezirk wird als Zustand deklariert (useState: wenn der Wert geändert wird,
+  // aktualisiert sich der Bezirk auch auf der Website) und wird beim Konstruieren
+  // anfangs auf "loading" gesetzt (nach einer Sekunde wird der Bezirk von "loading" auf "all" gesetzt).
   const [district, setDistrict] = useState("loading");
 
+  // useEffect: Timer, Logging und andere "side effects" sind in der Regel
+  // im Main-Funktionskomponente nicht zulässig. Die Funktion setTimeOut wird
+  // im Hintergrund laufen.
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDistrict("all");
-    }, 1000);
+      // Die Funktion setTimeOut läuft im Hintergrund.
+      setDistrict("all"); // Der Bezirk wird auf "all" gesetzt (es werden alle Bezirke angezeigt)
+    }, 1000); // Nachdem 1 Sekunde vergangen ist.
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <div className="container">
-      <Header />
+      <header className="header">
+        <h1>Urban Heat Islands</h1>
+        <h3>Wien</h3>
+      </header>
       <div className="customContainer">
-        {district && <Map district={district} />}
+        {district && <Map district={district} />}{" "}
+        {/* Wenn der Wert des Bezirkes legitim ist, wird die Map-Komponente angezeigt. */}
         <div className="subContainer">
-          {district !== "loading" ? (
+          {district !== "loading" ? ( // Wenn der Wert nicht "loading" ist, werden die Temperaturdaten des jeweiligen Bezirkes angezeigt.
             <>
-              <h2>Temperaturdaten in:</h2>
+              <h2>Temperaturdaten in:</h2> {}
               <br />
-              <SelectDistrict district={district} setDistrict={setDistrict} />
-              <TemperatureData district={district} />
-              <br />
-              <h2>GeoJSON-Quellen</h2>
-              <p>(1) Gewässerkarte</p>
-              <a href="https://www.data.gv.at/katalog/dataset/ac4c2ac5-6be4-4471-bbf4-f09228f5db04">
-                Gewässernetz Wien
-              </a>
-              <br />
-              <a href="https://www.data.gv.at/katalog/dataset/ac478f32-3e3b-4c04-bc7d-aa75069b6367">
-                Stehende Gewässer Wien
-              </a>
-              <br />
-              <br />
-              <p>(2) Grüngürteln</p>
-              <a href="https://www.data.gv.at/katalog/dataset/10c7b88b-a708-4e17-a7ef-2c1ce0590377">
-                Grüngürtel Wien
-              </a>
-              <br />
-              <a href="https://www.data.gv.at/katalog/dataset/d0145df8-7f6d-46e1-9bc6-ee7897054104">
-                Öffentlich zugängige Grünflächen Wien
-              </a>
-              <br />
-              <br />
-              <p>(3) Bezirksgrenzen</p>
-              <a href="https://www.data.gv.at/katalog/dataset/2ee6b8bf-6292-413c-bb8b-bd22dbb2ad4b">
-                Bezirksgrenzen
-              </a>
+              {/* SelectBox für Bezirke */}
+              <SelectDistrict
+                district={district}
+                setDistrict={setDistrict}
+              />{" "}
+              {/* Temperaturdaten für Bezirke */}
+              <TemperatureData district={district} /> <br />
+              {/* GeoJSON-Quellen */}
+              <Sources />
             </>
           ) : (
-            <h1>Wird geladen...</h1>
-          )}
+            /* ansonsten wird der Header "Wird geladen..."  angezeigt */ <h1>
+              Wird geladen...
+            </h1>
+          )}{" "}
         </div>
       </div>
     </div>

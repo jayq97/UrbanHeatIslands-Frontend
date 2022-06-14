@@ -1,25 +1,32 @@
 import { Nav, NavLink, NavMenu } from "./NavbarElements";
 import { Routes, Route } from "react-router-dom";
 import Home from "../../screens";
-import Imprint from "../../screens/imprint";
+import LegalNotice from "../../screens/LegalNotice";
 import React from "react";
+
+// Navbar
 
 const Navbar = () => {
   return (
     <>
       <Nav>
         <NavMenu>
+          {/* "/" ist die Startseite */}
           <NavLink to="/" activeStyle>
             Map
           </NavLink>
-          <NavLink to="/imprint" activeStyle>
+          {/* "/legalNotice" ist das Impressum */}
+          <NavLink to="/legalNotice" activeStyle>
             Impressum
           </NavLink>
         </NavMenu>
       </Nav>
+      {/* Routing*/}
       <Routes>
+        {/* "/" -> Startseite */}
         <Route path="/" exact element={<Home />} />
-        <Route path="/imprint" element={<Imprint />} />
+        {/* "/legalNotice" -> Impressum */}
+        <Route path="/legalNotice" element={<LegalNotice />} />
       </Routes>
     </>
   );

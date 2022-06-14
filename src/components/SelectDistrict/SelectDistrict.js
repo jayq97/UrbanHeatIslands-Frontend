@@ -5,7 +5,16 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
+/* 
+  SelectDistrict hat zwei Parameter,
+  - district: der Zustandswert
+  - setDistrict: die Funktion, welche den Zustand verändert
+*/
 const SelectDistrict = ({ district, setDistrict }) => {
+  /* 
+    Vom Select-Komponente wird die Event-Value geholt und 
+    diese im setDistrict() übergeben (Der Zustandswert vom Bezirk wird geändert)
+  */
   const handleChange = (event) => {
     setDistrict(event.target.value);
   };
@@ -17,8 +26,10 @@ const SelectDistrict = ({ district, setDistrict }) => {
         <Select
           labelId="district-select-label"
           id="district-select"
+          // Daweil ausgewählter Bezirk
           value={district}
           label="Bezirk"
+          // Sobald der Wert geändert wird, wird handleChange() ausgeführt
           onChange={handleChange}
         >
           <MenuItem disabled>Wähle ein Bezirk</MenuItem>

@@ -1,8 +1,6 @@
 import * as React from "react";
 import useSwr from "swr";
 
-const fetcher = (...args) => fetch(...args).then((response) => response.json());
-
 const DistrictNameArray = [
   "Innere Stadt",
   "Leopoldstadt",
@@ -29,15 +27,23 @@ const DistrictNameArray = [
   "Liesing",
 ];
 
+// Die Daten aus dem Backend werden als Json-Datei ausgelesen
+const fetcher = (...args) => fetch(...args).then((response) => response.json());
+
+// Wetterstationen werden vom Backend geholt
 const Station = (district) => {
   var url = "https://uhi.w3.cs.technikum-wien.at/nodejs/getData/" + district;
+  /* Mit useSwr erhalten die Komponenten (stationData) konstant einen Stream von Daten 
+  und die Benutzeroberfläche wird immer aktualisiert. */
   const { data: stationData, error: stationError } = useSwr(url, { fetcher });
-  return stationData && !stationError ? stationData : [];
+  return stationData && !stationError ? stationData : []; // Falls die Daten nicht vorhanden sind, wird ein leeres Array zurückgegeben
 };
 
+// Temperatur bekommt den Bezirk als Parameter
 const TemperatureData = ({ district }) => {
-  const stations = Station(district);
+  const stations = Station(district); // Stationen aus dem Bezirk werden geholt.
 
+  // Stationen mit unvollständigen Werten werden herausgefiltert (.filter()) und nur die Temperaturen der Stationen geholt (.map()).
   var temp = stations
     .filter(
       (station) =>
@@ -52,13 +58,11 @@ const TemperatureData = ({ district }) => {
     )
     .map((station) => station.temp);
 
-  console.log(temp);
+  var minTemp = Math.min(...temp); // Minimale Temperatur
+  var maxTemp = Math.max(...temp); // Maximale Temperatur
 
-  var minTemp = Math.min(...temp);
-  var maxTemp = Math.max(...temp);
-
-  var sum = temp.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
-  var avgTemp = sum / temp.length || 0;
+  var sum = temp.reduce((a, b) => parseFloat(a) + parseFloat(b), 0); // Summe der Temperatur
+  var avgTemp = sum / temp.length || 0; // Durchschnittstemperatur
 
   return (
     <>
@@ -70,6 +74,7 @@ const TemperatureData = ({ district }) => {
         <tr>
           <th>Durchschnitt Temperatur: </th>
           <td style={{ textAlign: "right" }}>
+            {/* Der Wert wird auf eine Nachkommastelle gerundet */}
             {parseFloat(avgTemp.toFixed(1))} °C
           </td>
         </tr>
@@ -89,9 +94,11 @@ const TemperatureData = ({ district }) => {
 
 export default TemperatureData;
 
+// getAllData: ALLE Wetterstationen werden geholt
 const getAllData = () => {
   var tableRow = [];
 
+  // Die for-Schleife wird 23 Mal (wegen 23 Bezirke) durchlaufen.
   for (var i = 0; i <= 22; i++) {
     const stations = Station(i + 1).filter(
       (station) =>
@@ -109,6 +116,7 @@ const getAllData = () => {
     var sum = temp.reduce((a, b) => a + b, 0);
     var avg = sum / temp.length || 0;
 
+    // Für den jeweiligen Bezirk werden die Temperaturdaten in einem Array abgespeichert.
     tableRow.push([
       <tr>
         {" "}
@@ -121,6 +129,7 @@ const getAllData = () => {
     ]);
   }
 
+  // Das Array wird sortiert zurückgegeben.
   return tableRow.sort(function (a, b) {
     return b[1] - a[1];
   });

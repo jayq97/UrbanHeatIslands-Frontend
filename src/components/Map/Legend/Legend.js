@@ -2,12 +2,16 @@ import { useEffect } from "react";
 import L from "leaflet";
 import "./Legend.css";
 
-function Legend({ map }) {
+// Die Legende bekommt die Map als Parameter
+const Legend = ({ map }) => {
   useEffect(() => {
+    // Binde die Legende im Hintergrund ein
     if (map) {
-      const legend = L.control({ position: "bottomright" });
+      // Falls Map vorhanden
+      const legend = L.control({ position: "bottomright" }); // Die Legende wird unten rechts platziert
 
       legend.onAdd = () => {
+        // Die Legende bekommt die Temperaturbereiche als HTML eingebunden
         const div = L.DomUtil.create("div", "info legend");
         div.innerHTML =
           "<h4>Legende (°C)</h4>" +
@@ -23,10 +27,11 @@ function Legend({ map }) {
         return div;
       };
 
-      legend.addTo(map);
+      legend.addTo(map); // Schließlich wird dann bei der Map die Legende eingebunden
     }
+    // Die Legende wird nur eingebunden, wenn der Wert im Array im zweiten Parameter von useEffect()) geändert wird.
   }, [map]);
   return null;
-}
+};
 
 export default Legend;
