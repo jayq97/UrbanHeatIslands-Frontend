@@ -26,10 +26,6 @@ const Home = () => {
 
   return (
     <div className="container">
-      <header className="header">
-        <h1>Urban Heat Islands</h1>
-        <h3>Wien</h3>
-      </header>
       <div className="customContainer">
         {district && <Map district={district} />}{" "}
         {/* Wenn der Wert des Bezirkes legitim ist, wird die Map-Komponente angezeigt. */}
