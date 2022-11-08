@@ -19,13 +19,3 @@
 }
 
 /* Customize the Clustered Markers */
-.marker-cluster-custom {
-  background-color: blue;
-  border: 3px solid;
-  border-radius: 50%;
-  color: lightblue;
-  height: 40px;
-  line-height: 37px;
-  text-align: center;
-  width: 40px;
-}

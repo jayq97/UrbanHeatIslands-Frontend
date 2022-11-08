@@ -32,7 +32,7 @@ const fetcher = (...args) => fetch(...args).then((response) => response.json());
 
 // Wetterstationen werden vom Backend geholt
 const Station = (district) => {
-  var url = "https://uhi.w3.cs.technikum-wien.at/nodejs/getData/" + district;
+  let url = "https://uhi.w3.cs.technikum-wien.at/nodejs/getData/" + district;
   /* Mit useSwr erhalten die Komponenten (stationData) konstant einen Stream von Daten 
   und die Benutzeroberfläche wird immer aktualisiert. */
   const { data: stationData, error: stationError } = useSwr(url, { fetcher });
@@ -41,10 +41,8 @@ const Station = (district) => {
 
 // Temperatur bekommt den Bezirk als Parameter
 const TemperatureData = ({ district }) => {
-  const stations = Station(district); // Stationen aus dem Bezirk werden geholt.
-
   // Stationen mit unvollständigen Werten werden herausgefiltert (.filter()) und nur die Temperaturen der Stationen geholt (.map()).
-  var temp = stations
+  const stations = Station(district) // Stationen aus dem Bezirk werden geholt.
     .filter(
       (station) =>
         district !== 0 &&
@@ -55,37 +53,97 @@ const TemperatureData = ({ district }) => {
         station.windspeed !== null &&
         station.pressure !== null &&
         station.time !== null
-    )
-    .map((station) => station.temp);
+    );
 
-  var minTemp = Math.min(...temp); // Minimale Temperatur
-  var maxTemp = Math.max(...temp); // Maximale Temperatur
-
-  var sum = temp.reduce((a, b) => parseFloat(a) + parseFloat(b), 0); // Summe der Temperatur
-  var avgTemp = sum / temp.length || 0; // Durchschnittstemperatur
+  let temp = getMinMaxAvgValues(stations.map((station) => station.temp));
+  let humidity = getMinMaxAvgValues(
+    stations.map((station) => station.humidity)
+  );
+  let windspeed = getMinMaxAvgValues(
+    stations.map((station) => station.windspeed)
+  );
+  let pressure = getMinMaxAvgValues(
+    stations.map((station) => station.pressure)
+  );
 
   return (
     <>
       <table style={{ width: "100%" }}>
-        <tr>
-          <th>Maximale Temperatur: </th>
-          <td style={{ textAlign: "right" }}>{maxTemp} °C</td>
+        <tr style={{ fontSize: "20px" }}>
+          <th
+            style={{
+              borderLeft: "1px solid white",
+              borderTop: "1px solid white",
+            }}
+          ></th>
+          <td style={{ textAlign: "center" }}>min</td>
+          <td style={{ textAlign: "center" }}>Ø</td>
+          <td style={{ textAlign: "center" }}>max</td>
         </tr>
-        <tr>
-          <th>Durchschnitt Temperatur: </th>
-          <td style={{ textAlign: "right" }}>
-            {/* Der Wert wird auf eine Nachkommastelle gerundet */}
-            {parseFloat(avgTemp.toFixed(1))} °C
+        <tr style={{ fontSize: "16px" }}>
+          <th style={{ textAlign: "right" }}>Temperatur (°C):</th>
+          <td style={{ textAlign: "center" }}>
+            {temp.min !== null ? temp.min : "keine Daten"}
+          </td>
+          <td style={{ textAlign: "center" }}>
+            {temp.avg !== null ? temp.avg : "keine Daten"}
+          </td>
+          <td style={{ textAlign: "center" }}>
+            {temp.max !== null ? temp.max : "keine Daten"}
           </td>
         </tr>
-        <tr>
-          <th>Minimale Temperatur: </th>
-          <td style={{ textAlign: "right" }}>{minTemp} °C</td>
+        <tr style={{ fontSize: "16px" }}>
+          <th style={{ textAlign: "right" }}>Feuchtigkeit (%):</th>
+          <td style={{ textAlign: "center" }}>
+            {humidity.min !== null ? humidity.min : "keine Daten"}
+          </td>
+          <td style={{ textAlign: "center" }}>
+            {humidity.avg !== null ? humidity.avg : "keine Daten"}
+          </td>
+          <td style={{ textAlign: "center" }}>
+            {humidity.max !== null ? humidity.max : "keine Daten"}
+          </td>
+        </tr>
+        <tr style={{ fontSize: "16px" }}>
+          <th style={{ textAlign: "right" }}>Windgeschwindigkeit (km/h):</th>
+          <td style={{ textAlign: "center" }}>
+            {windspeed.min !== null ? windspeed.min : "keine Daten"}
+          </td>
+          <td style={{ textAlign: "center" }}>
+            {windspeed.avg !== null ? windspeed.avg : "keine Daten"}
+          </td>
+          <td style={{ textAlign: "center" }}>
+            {windspeed.max !== null ? windspeed.max : "keine Daten"}
+          </td>
+        </tr>
+        <tr style={{ fontSize: "16px" }}>
+          <th style={{ textAlign: "right" }}>Luftdruck (mbar):</th>
+          <td style={{ textAlign: "center" }}>
+            {pressure.min !== null ? pressure.min : "keine Daten"}
+          </td>
+          <td style={{ textAlign: "center" }}>
+            {pressure.avg !== null ? pressure.avg : "keine Daten"}
+          </td>
+          <td style={{ textAlign: "center" }}>
+            {pressure.max !== null ? pressure.max : "keine Daten"}
+          </td>
         </tr>
       </table>
       <br />
-      <h2>Durchschnitt Temperaturen:</h2>
+      <h2>Durchschnittswerte Ø:</h2>
       <table style={{ width: "100%" }}>
+        <tr style={{ fontSize: "20px" }}>
+          <th
+            style={{
+              borderLeft: "1px solid white",
+              borderTop: "1px solid white",
+            }}
+          ></th>
+          <td style={{ textAlign: "center" }}>°C</td>
+          <td style={{ textAlign: "center" }}>%</td>
+          <td style={{ textAlign: "center" }}>km/h</td>
+          <td style={{ textAlign: "center" }}>mbar</td>
+        </tr>
         {getAllData().map((tableRow) => tableRow[0])}
       </table>
     </>
@@ -96,10 +154,10 @@ export default TemperatureData;
 
 // getAllData: ALLE Wetterstationen werden geholt
 const getAllData = () => {
-  var tableRow = [];
+  let tableRow = [];
 
   // Die for-Schleife wird 23 Mal (wegen 23 Bezirke) durchlaufen.
-  for (var i = 0; i <= 22; i++) {
+  for (let i = 0; i <= 22; i++) {
     const stations = Station(i + 1).filter(
       (station) =>
         station.lat &&
@@ -111,21 +169,39 @@ const getAllData = () => {
         station.time !== null
     );
 
-    var temp = stations.map((station) => parseFloat(station.temp));
-
-    var sum = temp.reduce((a, b) => a + b, 0);
-    var avg = sum / temp.length || 0;
+    let avgTemp = getAvgValues(
+      stations.map((station) => parseFloat(station.temp))
+    );
+    let avgHumidity = getAvgValues(
+      stations.map((station) => parseFloat(station.humidity))
+    );
+    let avgWindspeed = getAvgValues(
+      stations.map((station) => parseFloat(station.windspeed))
+    );
+    let avgPressure = getAvgValues(
+      stations.map((station) => parseFloat(station.pressure))
+    );
 
     // Für den jeweiligen Bezirk werden die Temperaturdaten in einem Array abgespeichert.
     tableRow.push([
-      <tr>
-        {" "}
+      <tr style={{ fontSize: "16px" }}>
         <th>
           ({i + 1}) {DistrictNameArray[i]}:{" "}
         </th>
-        <td style={{ textAlign: "right" }}>{parseFloat(avg.toFixed(1))} °C</td>
+        <td style={{ textAlign: "center" }}>
+          {avgTemp !== null ? avgTemp : "keine Daten"}
+        </td>
+        <td style={{ textAlign: "center" }}>
+          {avgHumidity !== null ? avgHumidity : "keine Daten"}
+        </td>
+        <td style={{ textAlign: "center" }}>
+          {avgWindspeed !== null ? avgWindspeed : "keine Daten"}
+        </td>
+        <td style={{ textAlign: "center" }}>
+          {avgPressure !== null ? avgPressure : "keine Daten"}
+        </td>
       </tr>,
-      parseFloat(avg.toFixed(1)),
+      avgTemp,
     ]);
   }
 
@@ -133,4 +209,27 @@ const getAllData = () => {
   return tableRow.sort(function (a, b) {
     return b[1] - a[1];
   });
+};
+
+const getMinMaxAvgValues = (array) => {
+  let min, max, avg;
+  if (array.length !== 0) {
+    min = Math.min(...array); // Minimaler Wert
+    max = Math.max(...array); // Maximaler Wert
+
+    let sum = array.reduce((a, b) => parseFloat(a) + parseFloat(b), 0); // Summe
+
+    /* Der Wert wird auf eine Nachkommastelle gerundet */
+    avg = parseFloat((sum / array.length || 0).toFixed(1)); // Durchschnitt
+  }
+  return { min: min, max: max, avg: avg };
+};
+
+const getAvgValues = (array) => {
+  let avg;
+  if (array.length !== 0) {
+    let sum = array.reduce((a, b) => a + b, 0);
+    avg = parseFloat((sum / array.length || 0).toFixed(1));
+  }
+  return avg;
 };

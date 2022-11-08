@@ -32,7 +32,7 @@ const Home = () => {
         <div className="subContainer">
           {district !== "loading" ? ( // Wenn der Wert nicht "loading" ist, werden die Temperaturdaten des jeweiligen Bezirkes angezeigt.
             <>
-              <h2>Temperaturdaten in:</h2> {}
+              <h2>Wetterdaten in Bezirk:</h2>
               <br />
               {/* SelectBox für Bezirke */}
               <SelectDistrict

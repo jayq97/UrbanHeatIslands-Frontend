@@ -3,7 +3,7 @@
 const Sources = () => {
   return (
     <>
-      <h2>GeoJSON-Quellen</h2>
+      <h2>GeoJSON-Quellen:</h2>
       <p>(1) Gewässerkarte</p>
       <a href="https://www.data.gv.at/katalog/dataset/ac4c2ac5-6be4-4471-bbf4-f09228f5db04">
         Gewässernetz Wien

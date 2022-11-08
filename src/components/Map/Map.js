@@ -251,6 +251,12 @@ const Map = ({ district }) => {
                                       {station.pressure} mbar
                                     </td>
                                   </tr>
+                                  <tr>
+                                    <th>Höhe über dem Meeresspiegel: </th>
+                                    <td style={{ textAlign: "right" }}>
+                                      {station.elevation} m
+                                    </td>
+                                  </tr>
                                 </table>
                                 <p className="font">
                                   Zuletzt aktualisiert am:{" "}
@@ -319,6 +325,7 @@ const Map = ({ district }) => {
               </LayersControl>
 
               {/* Bezirksgrenzen */}
+
               <GeoJSON
                 data={AlleBezirke}
                 style={{
@@ -329,6 +336,7 @@ const Map = ({ district }) => {
                   weight: 2,
                 }}
               ></GeoJSON>
+
               {/* Die Heatlayer wird in der Heatmap eingebunden mit allen Wetterstationen */}
               <HeatLayer map={map2} stations={stations} />
             </MapContainer>
@@ -364,13 +372,19 @@ const renderGeoJSON = (district) => {
       )
       .map((station) => parseFloat(station.temp));
 
-    MinTempArray.push(Math.min(...temp)); // Minimale Temperatur für den Bezirk wird in das Array gespeichert
-    MaxTempArray.push(Math.max(...temp)); // Maximale Temperatur für den Bezirk wird in das Array gespeichert
+    if (temp.length !== 0) {
+      MinTempArray.push(Math.min(...temp)); // Minimale Temperatur für den Bezirk wird in das Array gespeichert
+      MaxTempArray.push(Math.max(...temp)); // Maximale Temperatur für den Bezirk wird in das Array gespeichert
 
-    var sum = temp.reduce((a, b) => a + b, 0);
-    var avg = sum / temp.length || 0;
+      var sum = temp.reduce((a, b) => a + b, 0);
+      var avg = sum / temp.length || 0;
 
-    AvgTempArray.push(parseFloat(avg.toFixed(1))); // Durchschnittsemperatur für den Bezirk wird in das Array gespeichert
+      AvgTempArray.push(parseFloat(avg.toFixed(1))); // Durchschnittsemperatur für den Bezirk wird in das Array gespeichert
+    } else {
+      MinTempArray.push(null);
+      MaxTempArray.push(null);
+      AvgTempArray.push(null);
+    }
   }
 
   var GeoJSONOutput = []; // Das Array, was als GeoJSON ausgegeben wird
@@ -420,15 +434,21 @@ const renderGeoJSON = (district) => {
               <table style={{ width: "100%" }}>
                 <tr>
                   <th>Maximale Temperatur: </th>
-                  <td style={{ textAlign: "right" }}>{MaxTempArray[j]} °C</td>
+                  <td style={{ textAlign: "right" }}>
+                    {MaxTempArray[j] ? MaxTempArray[j] + "°C" : "keine Daten"}
+                  </td>
                 </tr>
                 <tr>
                   <th>Durchschnitt Temperatur: </th>
-                  <td style={{ textAlign: "right" }}>{AvgTempArray[j]} °C</td>
+                  <td style={{ textAlign: "right" }}>
+                    {AvgTempArray[j] ? AvgTempArray[j] + "°C" : "keine Daten"}
+                  </td>
                 </tr>
                 <tr>
                   <th>Minimale Temperatur: </th>
-                  <td style={{ textAlign: "right" }}>{MinTempArray[j]} °C</td>
+                  <td style={{ textAlign: "right" }}>
+                    {MinTempArray[j] ? MinTempArray[j] + "°C" : "keine Daten"}
+                  </td>
                 </tr>
               </table>
             </div>
@@ -481,19 +501,25 @@ const renderGeoJSON = (district) => {
               <tr>
                 <th>Maximale Temperatur: </th>
                 <td style={{ textAlign: "right" }}>
-                  {MaxTempArray[parseInt(district) - 1]} °C
+                  {MaxTempArray[parseInt(district) - 1]
+                    ? MaxTempArray[parseInt(district) - 1] + "°C"
+                    : "keine Daten"}
                 </td>
               </tr>
               <tr>
                 <th>Durchschnitt Temperatur: </th>
                 <td style={{ textAlign: "right" }}>
-                  {AvgTempArray[parseInt(district) - 1]} °C
+                  {AvgTempArray[parseInt(district) - 1]
+                    ? AvgTempArray[parseInt(district) - 1] + "°C"
+                    : "keine Daten"}
                 </td>
               </tr>
               <tr>
                 <th>Minimale Temperatur: </th>
                 <td style={{ textAlign: "right" }}>
-                  {MinTempArray[parseInt(district) - 1]} °C
+                  {MinTempArray[parseInt(district) - 1]
+                    ? MinTempArray[parseInt(district) - 1] + "°C"
+                    : "keine Daten"}
                 </td>
               </tr>
             </table>
@@ -508,7 +534,8 @@ const renderGeoJSON = (district) => {
 
 // Style der Station wird nach Temperaturbereich zurückgegeben
 const renderStationColor = (temp) => {
-  if (temp < 0) return MarkerLower0; // < 0°C
+  if (temp === null) return "#FFFFFF"; // keine Temperatur
+  else if (temp < 0) return MarkerLower0; // < 0°C
   else if (temp >= 0 && temp < 5) return Marker0to5; // 0-5°C
   else if (temp >= 5 && temp < 10) return Marker5to10; // 5-10°C
   else if (temp >= 10 && temp < 15) return Marker10to15; // 10-15°C
@@ -522,7 +549,8 @@ const renderStationColor = (temp) => {
 
 // Farbe der Bezirks-GeoJSON wird nach Temperaturbereich zurückgegeben
 const renderGeoJSONColor = (temp) => {
-  if (temp < 0.0) return "#8DD0F3"; // < 0°C
+  if (temp === null) return "#FFFFFF";
+  else if (temp < 0.0) return "#8DD0F3"; // < 0°C
   else if (temp >= 0.0 && temp < 5.0) return "#83C18C"; // 0-5°C
   else if (temp >= 5.0 && temp < 10.0) return "#75B360"; // 5-10°C
   else if (temp >= 10.0 && temp < 15.0) return "#C9D968"; // 10-15°C
