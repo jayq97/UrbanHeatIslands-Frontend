@@ -228,34 +228,34 @@ const Map = ({ district }) => {
                                 <br />
                                 <table style={{ width: "100%" }}>
                                   <tr>
-                                    <th>Temperatur: </th>
-                                    <td style={{ textAlign: "right" }}>
-                                      {station.temp} °C
-                                    </td>
+                                    <th style={{ textAlign: "right" }}>
+                                      Temperatur:{" "}
+                                    </th>
+                                    <td>{station.temp} °C</td>
                                   </tr>
                                   <tr>
-                                    <th>Feuchtigkeit: </th>
-                                    <td style={{ textAlign: "right" }}>
-                                      {station.humidity} %
-                                    </td>
+                                    <th style={{ textAlign: "right" }}>
+                                      Feuchtigkeit:{" "}
+                                    </th>
+                                    <td>{station.humidity} %</td>
                                   </tr>
                                   <tr>
-                                    <th>Windgeschwindigkeit: </th>
-                                    <td style={{ textAlign: "right" }}>
-                                      {station.windspeed} km/h
-                                    </td>
+                                    <th style={{ textAlign: "right" }}>
+                                      Windgeschwindigkeit:{" "}
+                                    </th>
+                                    <td>{station.windspeed} km/h</td>
                                   </tr>
                                   <tr>
-                                    <th>Luftdruck: </th>
-                                    <td style={{ textAlign: "right" }}>
-                                      {station.pressure} mbar
-                                    </td>
+                                    <th style={{ textAlign: "right" }}>
+                                      Luftdruck:{" "}
+                                    </th>
+                                    <td>{station.pressure} mbar</td>
                                   </tr>
                                   <tr>
-                                    <th>Höhe über dem Meeresspiegel: </th>
-                                    <td style={{ textAlign: "right" }}>
-                                      {station.elevation} m
-                                    </td>
+                                    <th style={{ textAlign: "right" }}>
+                                      Höhe über dem Meeresspiegel:{" "}
+                                    </th>
+                                    <td>{station.elevation} m</td>
                                   </tr>
                                 </table>
                                 <p className="font">
@@ -351,185 +351,217 @@ export default Map;
 
 // Die Daten für den jeweiligen Bezirk werden in das jeweilige Bezirks-GeoJSON eingebunden
 const renderGeoJSON = (district) => {
-  var MinTempArray = []; // Array minimale Temperatur
-  var MaxTempArray = []; // Array maximale Temperatur
-  var AvgTempArray = []; // Array Durchschnittstemperatur
+  var tempArray = []; // Array Temperatur
+  var humidityArray = []; // Array Temperatur
+  var windspeedArray = []; // Array Temperatur
+  var pressureArray = []; // Array Temperatur
 
   // Für jeden Bezirk (23 Mal - 23 Bezirke) werden die Temperaturdaten geholt
   for (var i = 0; i <= 22; i++) {
     // Stationen aus dem Bezirk werden herausgefiltert (.filter()) und nur die Temperaturen der Stationen geholt (.map()).
-    const temp = Station(i + 1)
-      .filter(
-        (station) =>
-          district !== 0 &&
-          station.lat &&
-          station.lon &&
-          station.temp !== null &&
-          station.humidity !== null &&
-          station.windspeed !== null &&
-          station.pressure !== null &&
-          station.time !== null
+    const stations = Station(i + 1).filter(
+      (station) =>
+        district !== 0 &&
+        station.lat &&
+        station.lon &&
+        station.temp !== null &&
+        station.humidity !== null &&
+        station.windspeed !== null &&
+        station.pressure !== null &&
+        station.time !== null
+    );
+
+    tempArray.push(
+      getMinMaxAvgValues(stations.map((station) => parseFloat(station.temp)))
+    );
+    humidityArray.push(
+      getMinMaxAvgValues(
+        stations.map((station) => parseFloat(station.humidity))
       )
-      .map((station) => parseFloat(station.temp));
-
-    if (temp.length !== 0) {
-      MinTempArray.push(Math.min(...temp)); // Minimale Temperatur für den Bezirk wird in das Array gespeichert
-      MaxTempArray.push(Math.max(...temp)); // Maximale Temperatur für den Bezirk wird in das Array gespeichert
-
-      var sum = temp.reduce((a, b) => a + b, 0);
-      var avg = sum / temp.length || 0;
-
-      AvgTempArray.push(parseFloat(avg.toFixed(1))); // Durchschnittsemperatur für den Bezirk wird in das Array gespeichert
-    } else {
-      MinTempArray.push(null);
-      MaxTempArray.push(null);
-      AvgTempArray.push(null);
-    }
+    );
+    windspeedArray.push(
+      getMinMaxAvgValues(
+        stations.map((station) => parseFloat(station.windspeed))
+      )
+    );
+    pressureArray.push(
+      getMinMaxAvgValues(
+        stations.map((station) => parseFloat(station.pressure))
+      )
+    );
   }
 
   var GeoJSONOutput = []; // Das Array, was als GeoJSON ausgegeben wird
 
   // Wenn der Zustandswert auf "all" ist, füge für jeden Bezirk ein GeoJSON hinzu
   if (district === "all") {
-    for (var j = 0; j < GeoJSONDataArray.length; j++) {
+    for (let j = 0; j < GeoJSONDataArray.length; j++) {
       GeoJSONOutput.push(
-        <GeoJSON
-          key={j + 1}
-          data={GeoJSONDataArray[j]}
-          // Das Style hängt von dem Temperaturbereich ab (siehe renderGeoJSONColor() Funktion)
-          style={{
-            fillColor: renderGeoJSONColor(AvgTempArray[j]),
-            fillOpacity: 0.6,
-            color: "#000000",
-            opacity: 1,
-            weight: 2,
-          }}
-          // Eventhandler mit dem Maus über das GeoJSON
-          onEachFeature={function (feature, layer) {
-            layer.on("mouseover", function () {
-              this.setStyle({
-                fillColor: "#FFFFFF",
-                fillOpacity: 0.3,
-              });
-            });
-            layer.on("mouseout", function () {
-              this.setStyle({
-                fillColor: this.defaultOptions.style.fillColor,
-                fillOpacity: this.defaultOptions.style.fillOpacity,
-              });
-            });
-          }}
-        >
-          <Tooltip width="auto">
-            <p>
-              ({j + 1}) {DistrictNameArray[j]}
-            </p>
-          </Tooltip>
-          <Popup width="auto">
-            <div>
-              <h1>{DistrictNameArray[j]}</h1>
-              <h2>1{j + 1 < 10 ? "0" + parseInt(j + 1) : j + 1}0 Wien</h2>
-              <hr width="auto" />
-              <br />
-              <table style={{ width: "100%" }}>
-                <tr>
-                  <th>Maximale Temperatur: </th>
-                  <td style={{ textAlign: "right" }}>
-                    {MaxTempArray[j] ? MaxTempArray[j] + "°C" : "keine Daten"}
-                  </td>
-                </tr>
-                <tr>
-                  <th>Durchschnitt Temperatur: </th>
-                  <td style={{ textAlign: "right" }}>
-                    {AvgTempArray[j] ? AvgTempArray[j] + "°C" : "keine Daten"}
-                  </td>
-                </tr>
-                <tr>
-                  <th>Minimale Temperatur: </th>
-                  <td style={{ textAlign: "right" }}>
-                    {MinTempArray[j] ? MinTempArray[j] + "°C" : "keine Daten"}
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </Popup>
-        </GeoJSON>
+        getGeoJSONComponent(
+          tempArray,
+          humidityArray,
+          windspeedArray,
+          pressureArray,
+          j
+        )
       );
     }
     // ansonsten nur für den ausgewählten Bezirk
   } else {
+    let index = parseInt(district) - 1;
     GeoJSONOutput.push(
-      <GeoJSON
-        key={district}
-        data={GeoJSONDataArray[parseInt(district) - 1]}
-        // Das Style hängt von dem Temperaturbereich ab (siehe renderGeoJSONColor() Funktion)
-        style={{
-          fillColor: renderGeoJSONColor(AvgTempArray[parseInt(district) - 1]),
-          fillOpacity: 0.6,
-          color: "#000000",
-          opacity: 1,
-          weight: 2,
-        }}
-        // Eventhandler mit dem Maus über das GeoJSON
-        onEachFeature={function (feature, layer) {
-          layer.on("mouseover", function () {
-            this.setStyle({
-              fillColor: "#FFFFFF",
-              fillOpacity: 0.3,
-            });
-          });
-          layer.on("mouseout", function () {
-            this.setStyle({
-              fillColor: this.defaultOptions.style.fillColor,
-              fillOpacity: this.defaultOptions.style.fillOpacity,
-            });
-          });
-        }}
-      >
-        <Tooltip width="auto">
-          <p>
-            ({district}) {DistrictNameArray[parseInt(district) - 1]}
-          </p>
-        </Tooltip>
-        <Popup width="auto">
-          <div>
-            <h1>{DistrictNameArray[parseInt(district) - 1]}</h1>
-            <h2>1{district < 10 ? "0" + district : district}0 Wien</h2>
-            <hr width="auto" />
-            <br />
-            <table style={{ width: "100%" }}>
-              <tr>
-                <th>Maximale Temperatur: </th>
-                <td style={{ textAlign: "right" }}>
-                  {MaxTempArray[parseInt(district) - 1]
-                    ? MaxTempArray[parseInt(district) - 1] + "°C"
-                    : "keine Daten"}
-                </td>
-              </tr>
-              <tr>
-                <th>Durchschnitt Temperatur: </th>
-                <td style={{ textAlign: "right" }}>
-                  {AvgTempArray[parseInt(district) - 1]
-                    ? AvgTempArray[parseInt(district) - 1] + "°C"
-                    : "keine Daten"}
-                </td>
-              </tr>
-              <tr>
-                <th>Minimale Temperatur: </th>
-                <td style={{ textAlign: "right" }}>
-                  {MinTempArray[parseInt(district) - 1]
-                    ? MinTempArray[parseInt(district) - 1] + "°C"
-                    : "keine Daten"}
-                </td>
-              </tr>
-            </table>
-          </div>
-        </Popup>
-      </GeoJSON>
+      getGeoJSONComponent(
+        tempArray,
+        humidityArray,
+        windspeedArray,
+        pressureArray,
+        index
+      )
     );
   }
 
   return <LayerGroup>{GeoJSONOutput}</LayerGroup>; // GeoJSON(s) werden zurückgegeben
+};
+
+const getGeoJSONComponent = (
+  tempArray,
+  humidityArray,
+  windspeedArray,
+  pressureArray,
+  index
+) => {
+  return (
+    <GeoJSON
+      key={index + 1}
+      data={GeoJSONDataArray[index]}
+      // Das Style hängt von dem Temperaturbereich ab (siehe renderGeoJSONColor() Funktion)
+      style={{
+        fillColor: renderGeoJSONColor(tempArray[index]?.avg),
+        fillOpacity: 0.6,
+        color: "#000000",
+        opacity: 1,
+        weight: 2,
+      }}
+      // Eventhandler mit dem Maus über das GeoJSON
+      onEachFeature={function (feature, layer) {
+        layer.on("mouseover", function () {
+          this.setStyle({
+            fillColor: "#FFFFFF",
+            fillOpacity: 0.3,
+          });
+        });
+        layer.on("mouseout", function () {
+          this.setStyle({
+            fillColor: this.defaultOptions.style.fillColor,
+            fillOpacity: this.defaultOptions.style.fillOpacity,
+          });
+        });
+      }}
+    >
+      <Tooltip width="auto">
+        <p>
+          ({index + 1}) {DistrictNameArray[index]}
+        </p>
+      </Tooltip>
+      <Popup width="auto">
+        <div>
+          <h1>{DistrictNameArray[index]}</h1>
+          <h2>
+            1{index + 1 < 10 ? "0" + parseInt(index + 1) : index + 1}0 Wien
+          </h2>
+          <hr width="auto" />
+          <br />
+          <table>
+            <tr>
+              <th
+                style={{
+                  borderLeft: "1px solid white",
+                  borderTop: "1px solid white",
+                }}
+              ></th>
+              <td>min</td>
+              <td>Ø</td>
+              <td>max</td>
+            </tr>
+            <tr>
+              <th style={{ textAlign: "right" }}>Temperatur (°C):</th>
+              <td>
+                {tempArray[index]?.min !== null
+                  ? tempArray[index]?.min
+                  : "keine Daten"}
+              </td>
+              <td>
+                {tempArray[index]?.avg !== null
+                  ? tempArray[index]?.avg
+                  : "keine Daten"}
+              </td>
+              <td>
+                {tempArray[index]?.max !== null
+                  ? tempArray[index]?.max
+                  : "keine Daten"}
+              </td>
+            </tr>
+            <tr>
+              <th style={{ textAlign: "right" }}>Feuchtigkeit (%):</th>
+              <td>
+                {humidityArray[index]?.min !== null
+                  ? humidityArray[index]?.min
+                  : "keine Daten"}
+              </td>
+              <td>
+                {humidityArray[index]?.avg !== null
+                  ? humidityArray[index]?.avg
+                  : "keine Daten"}
+              </td>
+              <td>
+                {humidityArray[index]?.max !== null
+                  ? humidityArray[index]?.max
+                  : "keine Daten"}
+              </td>
+            </tr>
+            <tr>
+              <th style={{ textAlign: "right" }}>
+                Windgeschwindigkeit (km/h):
+              </th>
+              <td>
+                {windspeedArray[index]?.min !== null
+                  ? windspeedArray[index]?.min
+                  : "keine Daten"}
+              </td>
+              <td>
+                {windspeedArray[index]?.avg !== null
+                  ? windspeedArray[index]?.avg
+                  : "keine Daten"}
+              </td>
+              <td>
+                {windspeedArray[index]?.max !== null
+                  ? windspeedArray[index]?.max
+                  : "keine Daten"}
+              </td>
+            </tr>
+            <tr>
+              <th style={{ textAlign: "right" }}>Luftdruck (mbar):</th>
+              <td>
+                {pressureArray[index]?.min !== null
+                  ? pressureArray[index]?.min
+                  : "keine Daten"}
+              </td>
+              <td>
+                {pressureArray[index]?.avg !== null
+                  ? pressureArray[index]?.avg
+                  : "keine Daten"}
+              </td>
+              <td>
+                {pressureArray[index]?.max !== null
+                  ? pressureArray[index]?.max
+                  : "keine Daten"}
+              </td>
+            </tr>
+          </table>
+        </div>
+      </Popup>
+    </GeoJSON>
+  );
 };
 
 // Style der Station wird nach Temperaturbereich zurückgegeben
@@ -560,4 +592,18 @@ const renderGeoJSONColor = (temp) => {
   else if (temp >= 30.0 && temp < 35.0) return "#E37947"; // 30-35°C
   else if (temp >= 35.0) return "#DC4B42"; // > 35°C
   else return "#FFFFFF"; // keine Temperatur
+};
+
+const getMinMaxAvgValues = (array) => {
+  let min, max, avg;
+  if (array.length !== 0) {
+    min = Math.min(...array); // Minimaler Wert
+    max = Math.max(...array); // Maximaler Wert
+
+    let sum = array.reduce((a, b) => a + b, 0); // Summe
+
+    /* Der Wert wird auf eine Nachkommastelle gerundet */
+    avg = parseFloat((sum / array.length || 0).toFixed(1)); // Durchschnitt
+  }
+  return { min: min, max: max, avg: avg };
 };
