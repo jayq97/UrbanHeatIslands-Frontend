@@ -10,6 +10,7 @@ import {
   LayersControl,
   LayerGroup,
   GeoJSON,
+  Circle,
 } from "react-leaflet";
 
 // Leaflet Custom Components
@@ -30,7 +31,6 @@ import Grün1 from "../../data/grünflächen/GRUENFREIFLOGD_GRUENGEWOGD.json";
 import Grün2 from "../../data/grünflächen/OEFFGRUENFLOGD.json";
 
 // Bezirke GeoJSON
-import AlleBezirke from "../../data/bezirke/AlleBezirke.json";
 import InnereStadt from "../../data/bezirke/InnereStadt.json";
 import Leopoldstadt from "../../data/bezirke/Leopoldstadt.json";
 import Landstraße from "../../data/bezirke/Landstraße.json";
@@ -82,7 +82,10 @@ const Station = (district) => {
   var url = "https://uhi.w3.cs.technikum-wien.at/nodejs/getData/" + district;
   /* Mit useSwr erhalten die Komponenten (stationData) konstant einen Stream von Daten 
   und die Benutzeroberfläche wird immer aktualisiert. */
-  const { data: stationData, error: stationError } = useSwr(url, { fetcher });
+  const { data: stationData, error: stationError } = useSwr(
+    district !== "loading" ? url : null,
+    { fetcher }
+  );
   return stationData && !stationError ? stationData : []; // Falls die Daten nicht vorhanden sind, wird ein leeres Array zurückgegeben
 };
 
@@ -277,16 +280,24 @@ const Map = ({ district }) => {
                   </LayerGroup>
                 </LayersControl.Overlay>
                 {/* Gewässer GeoJSON */}
-                <LayersControl.Overlay name="Gewässer">
+                <LayersControl.Overlay name="Gewässernetz Wien">
                   <LayerGroup>
                     <GeoJSON data={Gew1} />
+                  </LayerGroup>
+                </LayersControl.Overlay>
+                <LayersControl.Overlay name="Stehende Gewässer Wien">
+                  <LayerGroup>
                     <GeoJSON data={Gew2} />
                   </LayerGroup>
                 </LayersControl.Overlay>
                 {/* Grünflächen GeoJSON */}
-                <LayersControl.Overlay name="Grünflächen">
+                <LayersControl.Overlay name="Grüngürtel Wien">
                   <LayerGroup>
                     <GeoJSON data={Grün1} style={{ color: "green" }} />
+                  </LayerGroup>
+                </LayersControl.Overlay>
+                <LayersControl.Overlay name="Öffentlich zugängige Grünflächen Wien">
+                  <LayerGroup>
                     <GeoJSON data={Grün2} style={{ color: "green" }} />
                   </LayerGroup>
                 </LayersControl.Overlay>
@@ -303,6 +314,8 @@ const Map = ({ district }) => {
             <MapContainer
               center={[48.210033, 16.363449]}
               zoom={12}
+              minZoom={10}
+              maxZoom={12}
               scrollWheelZoom={true}
               whenCreated={(map) => {
                 setMap2(map);
@@ -323,19 +336,6 @@ const Map = ({ district }) => {
                   />
                 </LayersControl.BaseLayer>
               </LayersControl>
-
-              {/* Bezirksgrenzen */}
-
-              <GeoJSON
-                data={AlleBezirke}
-                style={{
-                  fillColor: "#000000",
-                  fillOpacity: 0.1,
-                  color: "#000000",
-                  opacity: 1,
-                  weight: 2,
-                }}
-              ></GeoJSON>
 
               {/* Die Heatlayer wird in der Heatmap eingebunden mit allen Wetterstationen */}
               <HeatLayer map={map2} stations={stations} />

@@ -27,7 +27,7 @@ const Home = () => {
   return (
     <div className="container">
       <div className="customContainer">
-        {district && <Map district={district} />}{" "}
+        {district && <Map district={district} />}
         {/* Wenn der Wert des Bezirkes legitim ist, wird die Map-Komponente angezeigt. */}
         <div className="subContainer">
           {district !== "loading" ? ( // Wenn der Wert nicht "loading" ist, werden die Temperaturdaten des jeweiligen Bezirkes angezeigt.
@@ -35,10 +35,7 @@ const Home = () => {
               <h2>Wetterdaten in Bezirk:</h2>
               <br />
               {/* SelectBox für Bezirke */}
-              <SelectDistrict
-                district={district}
-                setDistrict={setDistrict}
-              />{" "}
+              <SelectDistrict district={district} setDistrict={setDistrict} />
               {/* Temperaturdaten für Bezirke */}
               <TemperatureData district={district} /> <br />
               {/* GeoJSON-Quellen */}
@@ -48,7 +45,7 @@ const Home = () => {
             /* ansonsten wird der Header "Wird geladen..."  angezeigt */ <h1>
               Wird geladen...
             </h1>
-          )}{" "}
+          )}
         </div>
       </div>
     </div>

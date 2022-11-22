@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import AlleBezirke from "../../../data/bezirke/AlleBezirke.json";
 import * as L from "leaflet";
 import "leaflet.heat";
 import "@asymmetrik/leaflet-d3";
@@ -57,15 +58,15 @@ const HeatLayer = ({ map, stations }) => {
           : [];
 
         var options = {
-          radius: 40,
-          opacity: 0.9,
+          radius: 70,
+          opacity: 0.75,
           duration: 400,
         };
 
         var hexLayer = L.hexbinLayer(options).addTo(map);
 
         hexLayer
-          .radiusRange(40)
+          .radiusRange(70)
           .lng(function (d) {
             return d[1];
           })
@@ -84,11 +85,31 @@ const HeatLayer = ({ map, stations }) => {
             "#DC4B42",
           ])
           .colorValue(function (d) {
-            var sum = d.reduce((a, b) => parseFloat(a) + parseFloat(b.o[2]), 0); // Summe der Temperatur
+            /* Damit man eindeutig identifizieren kann, wo der höchste Wert liegt
+            wird jeder Wert um 2 potenziert => exponentielle Proportion
+            */
+            var sum = d.reduce(
+              (a, b) =>
+                parseFloat(b.o[2]) >= 0
+                  ? parseFloat(a) + Math.pow(parseFloat(b.o[2]), 2) // falls der Wert >= 0 ist
+                  : parseFloat(a) - Math.pow(parseFloat(b.o[2]), 2), // falls der Wert < 0 ist
+              0
+            ); // Summe der Temperatur
             return sum / d.length || 0; // Durchschnitt
           });
 
         hexLayer.data(points);
+
+        L.geoJSON(AlleBezirke, {
+          style: {
+            fillColor: "#000000",
+            fillOpacity: 0.1,
+            color: "#000000",
+            opacity: 1,
+            weight: 2,
+          },
+        }).addTo(map);
+
         didLoad.current = true; // Fertig mit der Prozedur => es ist geladen
       }
     }, 1000); // nach 1 Sekunde
