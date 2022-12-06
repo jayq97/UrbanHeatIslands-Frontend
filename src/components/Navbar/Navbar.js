@@ -1,7 +1,10 @@
 import { Nav, NavLink, NavMenu } from "./NavbarElements";
 import { Routes, Route } from "react-router-dom";
+
 import Home from "../../screens";
 import LegalNotice from "../../screens/legalNotice";
+import WeatherData from "../../screens/weatherData";
+
 import React from "react";
 import Logo from "../../images/logo.png";
 
@@ -23,6 +26,9 @@ const Navbar = () => {
           <NavLink to="/legalNotice" activeStyle>
             Impressum
           </NavLink>
+          <NavLink to="/weatherData" activeStyle>
+            Wetterdaten
+          </NavLink>
         </NavMenu>
       </Nav>
       {/* Routing*/}
@@ -31,6 +37,7 @@ const Navbar = () => {
         <Route path="/" exact element={<Home />} />
         {/* "/legalNotice" -> Impressum */}
         <Route path="/legalNotice" element={<LegalNotice />} />
+        <Route path="/weatherData" element={<WeatherData />} />
       </Routes>
     </>
   );
