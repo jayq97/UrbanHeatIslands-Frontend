@@ -10,14 +10,13 @@ import {
   LayersControl,
   LayerGroup,
   GeoJSON,
-  Circle,
 } from "react-leaflet";
 
 // Leaflet Custom Components
 import Legend from "./Legend/Legend.js";
 import HeatLayer from "./HeatLayer/HeatLayer.js";
 
-import React, { useState } from "react";
+import { React, useState } from "react";
 
 import useSwr from "swr";
 import L from "leaflet";
@@ -171,8 +170,8 @@ const Map = ({ district }) => {
               center={[48.210033, 16.363449]}
               zoom={12}
               scrollWheelZoom={true}
-              whenCreated={(map) => {
-                setMap(map);
+              ref={(ref) => {
+                setMap(ref);
               }}
             >
               {/* Layer-Controls
@@ -317,8 +316,8 @@ const Map = ({ district }) => {
               minZoom={10}
               maxZoom={12}
               scrollWheelZoom={true}
-              whenCreated={(map) => {
-                setMap2(map);
+              ref={(ref) => {
+                setMap2(ref);
               }}
             >
               <LayersControl position="topright">
