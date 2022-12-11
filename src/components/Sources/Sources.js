@@ -5,10 +5,6 @@ const Sources = () => {
     <>
       <h2>GeoJSON-Quellen:</h2>
       <p>(1) Gewässerkarte</p>
-      <a href="https://www.data.gv.at/katalog/dataset/ac4c2ac5-6be4-4471-bbf4-f09228f5db04">
-        Gewässernetz Wien
-      </a>
-      <br />
       <a href="https://www.data.gv.at/katalog/dataset/ac478f32-3e3b-4c04-bc7d-aa75069b6367">
         Stehende Gewässer Wien
       </a>

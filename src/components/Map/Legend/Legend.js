@@ -22,8 +22,8 @@ const Legend = ({ map }) => {
           "<p><i style='background-color:#F5EE61;'>⠀⠀</i>15-20</p>" +
           "<p><i style='background-color:#C9D968;'>⠀⠀</i>10-15</p>" +
           "<p><i style='background-color:#75B360;'>⠀⠀</i>5-10</p>" +
-          "<p><i style='background-color:#83C18C;'>⠀⠀</i>0-5</p>" +
-          "<p><i style='background-color:#8DD0F3;'>⠀⠀</i>< 0</p>";
+          "<p><i style='background-color:#83C18C;'>⠀⠀</i>1-5</p>" +
+          "<p><i style='background-color:#8DD0F3;'>⠀⠀</i>< 1</p>";
         return div;
       };
 

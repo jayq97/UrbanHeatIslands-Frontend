@@ -15,19 +15,18 @@ import {
 // Leaflet Custom Components
 import Legend from "./Legend/Legend.js";
 import HeatLayer from "./HeatLayer/HeatLayer.js";
+import * as turf from "@turf/turf";
 
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 
 import useSwr from "swr";
 import L from "leaflet";
 
 // Gewässer GeoJSON
-import Gew1 from "../../data/gewässer/FLIESSGEWOGD.json";
-import Gew2 from "../../data/gewässer/STEHENDEGEWOGD.json";
+import Gewässer from "../../data/gewässer/Gewässer.json";
 
 // Grünflächen GeoJSON
-import Grün1 from "../../data/grünflächen/GRUENFREIFLOGD_GRUENGEWOGD.json";
-import Grün2 from "../../data/grünflächen/OEFFGRUENFLOGD.json";
+import Grünfläche from "../../data/grünflächen/Grünfläche.json";
 
 // Bezirke GeoJSON
 import InnereStadt from "../../data/bezirke/InnereStadt.json";
@@ -160,6 +159,9 @@ const Map = ({ district }) => {
       station.time !== null
   );
 
+  GetCoverageForStation(stations, Grünfläche, 3);
+  GetCoverageForStation(stations, Gewässer, 3);
+
   return (
     <>
       <table style={{ width: "100%" }}>
@@ -279,25 +281,15 @@ const Map = ({ district }) => {
                   </LayerGroup>
                 </LayersControl.Overlay>
                 {/* Gewässer GeoJSON */}
-                <LayersControl.Overlay name="Gewässernetz Wien">
+                <LayersControl.Overlay name="Gewässer">
                   <LayerGroup>
-                    <GeoJSON data={Gew1} />
-                  </LayerGroup>
-                </LayersControl.Overlay>
-                <LayersControl.Overlay name="Stehende Gewässer Wien">
-                  <LayerGroup>
-                    <GeoJSON data={Gew2} />
+                    <GeoJSON data={Gewässer} />
                   </LayerGroup>
                 </LayersControl.Overlay>
                 {/* Grünflächen GeoJSON */}
-                <LayersControl.Overlay name="Grüngürtel Wien">
+                <LayersControl.Overlay name="Grünfläche">
                   <LayerGroup>
-                    <GeoJSON data={Grün1} style={{ color: "green" }} />
-                  </LayerGroup>
-                </LayersControl.Overlay>
-                <LayersControl.Overlay name="Öffentlich zugängige Grünflächen Wien">
-                  <LayerGroup>
-                    <GeoJSON data={Grün2} style={{ color: "green" }} />
+                    <GeoJSON data={Grünfläche} style={{ color: "green" }} />
                   </LayerGroup>
                 </LayersControl.Overlay>
               </LayersControl>
@@ -566,8 +558,8 @@ const getGeoJSONComponent = (
 // Style der Station wird nach Temperaturbereich zurückgegeben
 const renderStationColor = (temp) => {
   if (temp === null) return "#FFFFFF"; // keine Temperatur
-  else if (temp < 0) return MarkerLower0; // < 0°C
-  else if (temp >= 0 && temp < 5) return Marker0to5; // 0-5°C
+  else if (temp < 1) return MarkerLower0; // < 0°C
+  else if (temp >= 1 && temp < 5) return Marker0to5; // 0-5°C
   else if (temp >= 5 && temp < 10) return Marker5to10; // 5-10°C
   else if (temp >= 10 && temp < 15) return Marker10to15; // 10-15°C
   else if (temp >= 15 && temp < 20) return Marker15to20; // 15-20°C
@@ -581,8 +573,8 @@ const renderStationColor = (temp) => {
 // Farbe der Bezirks-GeoJSON wird nach Temperaturbereich zurückgegeben
 const renderGeoJSONColor = (temp) => {
   if (temp === null) return "#FFFFFF";
-  else if (temp < 0.0) return "#8DD0F3"; // < 0°C
-  else if (temp >= 0.0 && temp < 5.0) return "#83C18C"; // 0-5°C
+  else if (temp < 1.0) return "#8DD0F3"; // < 0°C
+  else if (temp >= 1.0 && temp < 5.0) return "#83C18C"; // 0-5°C
   else if (temp >= 5.0 && temp < 10.0) return "#75B360"; // 5-10°C
   else if (temp >= 10.0 && temp < 15.0) return "#C9D968"; // 10-15°C
   else if (temp >= 15.0 && temp < 20.0) return "#F5EE61"; // 15-20°C
@@ -605,4 +597,59 @@ const getMinMaxAvgValues = (array) => {
     avg = parseFloat((sum / array.length || 0).toFixed(1)); // Durchschnitt
   }
   return { min: min, max: max, avg: avg };
+};
+
+const GetCoverageForStation = (stations, GeoJSON, radius) => {
+  //let array = [];
+
+  useEffect(() => {
+    let allCircles = [];
+    stations.forEach((element) => {
+      let circle = turf.circle([element.lon, element.lat], radius, {
+        units: "kilometers",
+        color: "red",
+      });
+      allCircles.push([element.station_id, circle]);
+    });
+
+    if (allCircles.length !== 0) {
+      let array = [];
+      allCircles.forEach((circle, index) => {
+        let percentageArray = [];
+        var multiPolygonInter = [];
+        GeoJSON.geometry.coordinates.forEach((greenElement, index2) => {
+          let intersection = turf.intersect(
+            circle[1],
+            turf.polygon(greenElement)
+          );
+          if (intersection !== null) {
+            //L.geoJson(intersection).addTo(map);
+
+            var circleArea = turf.area(circle[1]);
+            var interLayerArea = turf.area(intersection);
+
+            multiPolygonInter.push(intersection);
+            // Calculate how much of intersection is covered.
+
+            var areaPercentage = interLayerArea / circleArea;
+
+            percentageArray.push(areaPercentage);
+          }
+        });
+
+        var obj = {
+          id: circle[0],
+          featureGroup: multiPolygonInter,
+          coverage: percentageArray.reduce(
+            (a, b) => parseFloat(a) + parseFloat(b),
+            0
+          ),
+        };
+        array.push(obj);
+      });
+      GeoJSON === Grünfläche
+        ? console.log("Grünflächenabdeckung: ", array)
+        : console.log("Wasserflächenabdeckung: ", array);
+    }
+  }, [stations, GeoJSON, radius]);
 };
