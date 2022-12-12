@@ -71,58 +71,62 @@ const TemperatureData = ({ district }) => {
   return (
     <>
       <table style={{ width: "100%" }}>
-        <tr style={{ fontSize: "20px" }}>
-          <th
-            style={{
-              borderLeft: "1px solid white",
-              borderTop: "1px solid white",
-            }}
-          ></th>
-          <td>min</td>
-          <td>Ø</td>
-          <td>max</td>
-        </tr>
-        <tr style={{ fontSize: "16px" }}>
-          <th style={{ textAlign: "right" }}>Temperatur (°C):</th>
-          <td>{temp.min !== null ? temp.min : "keine Daten"}</td>
-          <td>{temp.avg !== null ? temp.avg : "keine Daten"}</td>
-          <td>{temp.max !== null ? temp.max : "keine Daten"}</td>
-        </tr>
-        <tr style={{ fontSize: "16px" }}>
-          <th style={{ textAlign: "right" }}>Feuchtigkeit (%):</th>
-          <td>{humidity.min !== null ? humidity.min : "keine Daten"}</td>
-          <td>{humidity.avg !== null ? humidity.avg : "keine Daten"}</td>
-          <td>{humidity.max !== null ? humidity.max : "keine Daten"}</td>
-        </tr>
-        <tr style={{ fontSize: "16px" }}>
-          <th style={{ textAlign: "right" }}>Windgeschwindigkeit (km/h):</th>
-          <td>{windspeed.min !== null ? windspeed.min : "keine Daten"}</td>
-          <td>{windspeed.avg !== null ? windspeed.avg : "keine Daten"}</td>
-          <td>{windspeed.max !== null ? windspeed.max : "keine Daten"}</td>
-        </tr>
-        <tr style={{ fontSize: "16px" }}>
-          <th style={{ textAlign: "right" }}>Luftdruck (mbar):</th>
-          <td>{pressure.min !== null ? pressure.min : "keine Daten"}</td>
-          <td>{pressure.avg !== null ? pressure.avg : "keine Daten"}</td>
-          <td>{pressure.max !== null ? pressure.max : "keine Daten"}</td>
-        </tr>
+        <tbody>
+          <tr style={{ fontSize: "20px" }} key="MinMaxAvgTotal">
+            <th
+              style={{
+                borderLeft: "1px solid white",
+                borderTop: "1px solid white",
+              }}
+            ></th>
+            <td>min</td>
+            <td>Ø</td>
+            <td>max</td>
+          </tr>
+          <tr style={{ fontSize: "16px" }} key="TempTotal">
+            <th style={{ textAlign: "right" }}>Temperatur (°C):</th>
+            <td>{temp.min !== null ? temp.min : "keine Daten"}</td>
+            <td>{temp.avg !== null ? temp.avg : "keine Daten"}</td>
+            <td>{temp.max !== null ? temp.max : "keine Daten"}</td>
+          </tr>
+          <tr style={{ fontSize: "16px" }} key="HumidityTotal">
+            <th style={{ textAlign: "right" }}>Feuchtigkeit (%):</th>
+            <td>{humidity.min !== null ? humidity.min : "keine Daten"}</td>
+            <td>{humidity.avg !== null ? humidity.avg : "keine Daten"}</td>
+            <td>{humidity.max !== null ? humidity.max : "keine Daten"}</td>
+          </tr>
+          <tr style={{ fontSize: "16px" }} key="WindspeedTotal">
+            <th style={{ textAlign: "right" }}>Windgeschwindigkeit (km/h):</th>
+            <td>{windspeed.min !== null ? windspeed.min : "keine Daten"}</td>
+            <td>{windspeed.avg !== null ? windspeed.avg : "keine Daten"}</td>
+            <td>{windspeed.max !== null ? windspeed.max : "keine Daten"}</td>
+          </tr>
+          <tr style={{ fontSize: "16px" }} key="PressureTotal">
+            <th style={{ textAlign: "right" }}>Luftdruck (mbar):</th>
+            <td>{pressure.min !== null ? pressure.min : "keine Daten"}</td>
+            <td>{pressure.avg !== null ? pressure.avg : "keine Daten"}</td>
+            <td>{pressure.max !== null ? pressure.max : "keine Daten"}</td>
+          </tr>
+        </tbody>
       </table>
       <br />
       <h2>Durchschnittswerte Ø:</h2>
       <table style={{ width: "100%" }}>
-        <tr style={{ fontSize: "20px" }}>
-          <th
-            style={{
-              borderLeft: "1px solid white",
-              borderTop: "1px solid white",
-            }}
-          ></th>
-          <td>°C</td>
-          <td>%</td>
-          <td>km/h</td>
-          <td>mbar</td>
-        </tr>
-        {getAllData().map((tableRow) => tableRow[0])}
+        <tbody>
+          <tr style={{ fontSize: "20px" }} key="MinMaxAvgDistrict">
+            <th
+              style={{
+                borderLeft: "1px solid white",
+                borderTop: "1px solid white",
+              }}
+            ></th>
+            <td>°C</td>
+            <td>%</td>
+            <td>km/h</td>
+            <td>mbar</td>
+          </tr>
+          {getAllData().map((tableRow) => tableRow[0])}
+        </tbody>
       </table>
     </>
   );
@@ -162,7 +166,7 @@ const getAllData = () => {
 
     // Für den jeweiligen Bezirk werden die Temperaturdaten in einem Array abgespeichert.
     tableRow.push([
-      <tr style={{ fontSize: "16px" }}>
+      <tr style={{ fontSize: "16px" }} key={i}>
         <th style={{ textAlign: "right" }}>
           ({i + 1}) {DistrictNameArray[i]}:{" "}
         </th>

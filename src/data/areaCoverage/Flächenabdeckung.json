@@ -1,0 +1,855 @@
+{
+    "radius": 3,
+    "data": [
+        {
+            "id": "IOTTAK3",
+            "greenCoverage": 0.14504379011623972,
+            "waterCoverage": 0.00029726943652769557
+        },
+        {
+            "id": "IPENZI14",
+            "greenCoverage": 0.7142497281867602,
+            "waterCoverage": 0.0008895720312279544
+        },
+        {
+            "id": "IBRIGI19",
+            "greenCoverage": 0.36346760673713036,
+            "waterCoverage": 0.04601323142013649
+        },
+        {
+            "id": "IDONAU88",
+            "greenCoverage": 0.49344355618932534,
+            "waterCoverage": 0.08442323516663577
+        },
+        {
+            "id": "IDONAU102",
+            "greenCoverage": 0.2219421292278795,
+            "waterCoverage": 0.029083255396055097
+        },
+        {
+            "id": "IFLORI95",
+            "greenCoverage": 0.41356024994154517,
+            "waterCoverage": 0.039946016400673086
+        },
+        {
+            "id": "ISIMME16",
+            "greenCoverage": 0.4999342713921206,
+            "waterCoverage": 0.0018814245355524518
+        },
+        {
+            "id": "IFAVORIT4",
+            "greenCoverage": 0.22972713301736503,
+            "waterCoverage": 0.007206263793156503
+        },
+        {
+            "id": "IFAVOR6",
+            "greenCoverage": 0.21995897714994275,
+            "waterCoverage": 0.007135273742369275
+        },
+        {
+            "id": "ILEOPO31",
+            "greenCoverage": 0.3996574255478793,
+            "waterCoverage": 0.06381913450511795
+        },
+        {
+            "id": "IMEIDL15",
+            "greenCoverage": 0.23500951120940436,
+            "waterCoverage": 0.008193331293448356
+        },
+        {
+            "id": "IRUDOL2",
+            "greenCoverage": 0.1465945101749971,
+            "waterCoverage": 0
+        },
+        {
+            "id": "IFAVORIT6",
+            "greenCoverage": 0.23315426069298037,
+            "waterCoverage": 0.008295251576684919
+        },
+        {
+            "id": "IDONAU9",
+            "greenCoverage": 0.5238370279960725,
+            "waterCoverage": 0.011702822107908455
+        },
+        {
+            "id": "IHIETZ11",
+            "greenCoverage": 0.4916900935899851,
+            "waterCoverage": 0.0014084759809638492
+        },
+        {
+            "id": "IPENZI53",
+            "greenCoverage": 0.7873219525429733,
+            "waterCoverage": 0.00014337114298068227
+        },
+        {
+            "id": "IFLORI1",
+            "greenCoverage": 0.20269909393771166,
+            "waterCoverage": 0.023096478103741453
+        },
+        {
+            "id": "IHERNA12",
+            "greenCoverage": 0.44945057180313913,
+            "waterCoverage": 0.0008716561282499395
+        },
+        {
+            "id": "ISIMME18",
+            "greenCoverage": 0.5460716778049144,
+            "waterCoverage": 0.03447556169343489
+        },
+        {
+            "id": "IFLORI132",
+            "greenCoverage": 0.22951596611469913,
+            "waterCoverage": 0.006757409042024967
+        },
+        {
+            "id": "INEUBA9",
+            "greenCoverage": 0.12677051139452142,
+            "waterCoverage": 0
+        },
+        {
+            "id": "IWIENWIE84",
+            "greenCoverage": 0.44999288987763225,
+            "waterCoverage": 0.003649816787049126
+        },
+        {
+            "id": "IWHRIN5",
+            "greenCoverage": 0.12501763028904905,
+            "waterCoverage": 0.00034545242015972434
+        },
+        {
+            "id": "ILEOPOLD64",
+            "greenCoverage": 0.5186662283491904,
+            "waterCoverage": 0.03323167541272584
+        },
+        {
+            "id": "IPENZI47",
+            "greenCoverage": 0.6816566162110136,
+            "waterCoverage": 0.0007332211298644302
+        },
+        {
+            "id": "IDONAU83",
+            "greenCoverage": 0.5439889761992851,
+            "waterCoverage": 0.07802886602311992
+        },
+        {
+            "id": "IDONAU100",
+            "greenCoverage": 0.5117781419562498,
+            "waterCoverage": 0.027952744395628313
+        },
+        {
+            "id": "IHIETZIN12",
+            "greenCoverage": 0.6613929576403503,
+            "waterCoverage": 0.0009133453160595969
+        },
+        {
+            "id": "IJOSEFST2",
+            "greenCoverage": 0.11940905420806872,
+            "waterCoverage": 0.00012836723291627484
+        },
+        {
+            "id": "IWIENWIE7",
+            "greenCoverage": 0.4247836270494227,
+            "waterCoverage": 0.0005418710652110235
+        },
+        {
+            "id": "ILIESI19",
+            "greenCoverage": 0.18620551849890224,
+            "waterCoverage": 0.00821683188438463
+        },
+        {
+            "id": "IPENZI39",
+            "greenCoverage": 0.7486279231035964,
+            "waterCoverage": 0.0008516185992571707
+        },
+        {
+            "id": "IFLORI88",
+            "greenCoverage": 0.18910671461228382,
+            "waterCoverage": 0.026308028237357534
+        },
+        {
+            "id": "ILEOPO60",
+            "greenCoverage": 0.46884253275596566,
+            "waterCoverage": 0.04003809923870855
+        },
+        {
+            "id": "IWIENWIE25",
+            "greenCoverage": 0.3285198391290666,
+            "waterCoverage": 0.08139144664962102
+        },
+        {
+            "id": "IDONAU87",
+            "greenCoverage": 0.48498430306335283,
+            "waterCoverage": 0.08738400879037869
+        },
+        {
+            "id": "IHIETZIN9",
+            "greenCoverage": 0.6710128057214683,
+            "waterCoverage": 0.0008999304905298324
+        },
+        {
+            "id": "IFLORI129",
+            "greenCoverage": 0.2110771217061875,
+            "waterCoverage": 0.041341679040736455
+        },
+        {
+            "id": "IPENZI10",
+            "greenCoverage": 0.7507058801570364,
+            "waterCoverage": 0.0008710420547582546
+        },
+        {
+            "id": "IDBLIN5",
+            "greenCoverage": 0.608323982212553,
+            "waterCoverage": 0.009071663651220543
+        },
+        {
+            "id": "IDONAU15",
+            "greenCoverage": 0.383702223647494,
+            "waterCoverage": 0.06506580105016953
+        },
+        {
+            "id": "IDBLIN1",
+            "greenCoverage": 0.3742984494370419,
+            "waterCoverage": 0.0004119916735381477
+        },
+        {
+            "id": "IALSER4",
+            "greenCoverage": 0.1327055144766481,
+            "waterCoverage": 0.00046640914722527026
+        },
+        {
+            "id": "ILEOPO77",
+            "greenCoverage": 0.44462385646205915,
+            "waterCoverage": 0.03855422492589508
+        },
+        {
+            "id": "IDONAU89",
+            "greenCoverage": 0.5222067255005826,
+            "waterCoverage": 0.020493175442655373
+        },
+        {
+            "id": "IBRIGI14",
+            "greenCoverage": 0.26018825433299264,
+            "waterCoverage": 0.02551972384268819
+        },
+        {
+            "id": "IHIETZIN15",
+            "greenCoverage": 0.661783905368679,
+            "waterCoverage": 0.000913345316059419
+        },
+        {
+            "id": "IHIETZ7",
+            "greenCoverage": 0.5433118931519959,
+            "waterCoverage": 0.000999590424439551
+        },
+        {
+            "id": "IINNER9",
+            "greenCoverage": 0.14547143840849558,
+            "waterCoverage": 0.00030088772170545696
+        },
+        {
+            "id": "IHERNA18",
+            "greenCoverage": 0.13551796422582055,
+            "waterCoverage": 0.0003710379760604051
+        },
+        {
+            "id": "IDONAU96",
+            "greenCoverage": 0.5403347756255087,
+            "waterCoverage": 0.017208250803237124
+        },
+        {
+            "id": "ILIESI26",
+            "greenCoverage": 0.18620506199620143,
+            "waterCoverage": 0.007398192501093707
+        },
+        {
+            "id": "IDONAU36",
+            "greenCoverage": 0.3828379198094611,
+            "waterCoverage": 0.017046393753373384
+        },
+        {
+            "id": "IFAVOR31",
+            "greenCoverage": 0.24395128808173594,
+            "waterCoverage": 0.009238893485016216
+        },
+        {
+            "id": "IDBLIN6",
+            "greenCoverage": 0.4544053627880503,
+            "waterCoverage": 0.000411991673538232
+        },
+        {
+            "id": "ILIESI11",
+            "greenCoverage": 0.307750704022498,
+            "waterCoverage": 0.0001579480591125331
+        },
+        {
+            "id": "IDONAU77",
+            "greenCoverage": 0.3745209176026442,
+            "waterCoverage": 0.01864486734311687
+        },
+        {
+            "id": "IWIEDE9",
+            "greenCoverage": 0.15866410804608327,
+            "waterCoverage": 0.00030088772170542915
+        },
+        {
+            "id": "IFLORI119",
+            "greenCoverage": 0.4090150311533307,
+            "waterCoverage": 0.02640793613969971
+        },
+        {
+            "id": "ILIESI18",
+            "greenCoverage": 0.19061261389553782,
+            "waterCoverage": 0.008193331293447197
+        },
+        {
+            "id": "IPENZI21",
+            "greenCoverage": 0.36403740962177666,
+            "waterCoverage": 0.0003904793647791115
+        },
+        {
+            "id": "ISIMME113",
+            "greenCoverage": 0.46911725035549917,
+            "waterCoverage": 0.003138051777259754
+        },
+        {
+            "id": "IDONAU113",
+            "greenCoverage": 0.3164498639667439,
+            "waterCoverage": 0.04496483815094718
+        },
+        {
+            "id": "ILEOPO83",
+            "greenCoverage": 0.4219714455146092,
+            "waterCoverage": 0.035054707304519844
+        },
+        {
+            "id": "IMEIDL7",
+            "greenCoverage": 0.23801565050346127,
+            "waterCoverage": 0.008202149027381866
+        },
+        {
+            "id": "IALSER7",
+            "greenCoverage": 0.1265010780628518,
+            "waterCoverage": 0.0004273476199702618
+        },
+        {
+            "id": "IRUDOL8",
+            "greenCoverage": 0.14441970595218592,
+            "waterCoverage": 0
+        },
+        {
+            "id": "ILANDS73",
+            "greenCoverage": 0.21702666298672416,
+            "waterCoverage": 0.002437880069675825
+        },
+        {
+            "id": "IFAVOR22",
+            "greenCoverage": 0.46109234901938057,
+            "waterCoverage": 0.00573097857372208
+        },
+        {
+            "id": "IDONAU63",
+            "greenCoverage": 0.48777586628244335,
+            "waterCoverage": 0.08522859602876608
+        },
+        {
+            "id": "ILIESI32",
+            "greenCoverage": 0.12457789146134755,
+            "waterCoverage": 0.002840321392989442
+        },
+        {
+            "id": "IFLORI104",
+            "greenCoverage": 0.3681740707269596,
+            "waterCoverage": 0.04147399557061955
+        },
+        {
+            "id": "IFLORI61",
+            "greenCoverage": 0.2695811087842554,
+            "waterCoverage": 0.00010217412919259004
+        },
+        {
+            "id": "ILIESI3",
+            "greenCoverage": 0.1427002613980915,
+            "waterCoverage": 0.004300079901290574
+        },
+        {
+            "id": "IINNER11",
+            "greenCoverage": 0.1825571395889273,
+            "waterCoverage": 0.0003008877217054482
+        },
+        {
+            "id": "IHERNA15",
+            "greenCoverage": 0.558400159927299,
+            "waterCoverage": 0.000729198467457771
+        },
+        {
+            "id": "IFLORI127",
+            "greenCoverage": 0.3290863304985575,
+            "waterCoverage": 0.004387679788908534
+        },
+        {
+            "id": "INEUBA7",
+            "greenCoverage": 0.1103703513734063,
+            "waterCoverage": 0.0001283672329162886
+        },
+        {
+            "id": "IWIENWIE15",
+            "greenCoverage": 0.4318632623156655,
+            "waterCoverage": 0.017437225721558664
+        },
+        {
+            "id": "IMEIDL16",
+            "greenCoverage": 0.216726480961453,
+            "waterCoverage": 0.00811941443043557
+        },
+        {
+            "id": "IRUDOL31",
+            "greenCoverage": 0.1363391108193868,
+            "waterCoverage": 0
+        },
+        {
+            "id": "IFLORIDS3",
+            "greenCoverage": 0.5047629800953891,
+            "waterCoverage": 0.0002764966807543242
+        },
+        {
+            "id": "IWIENWIE59",
+            "greenCoverage": 0.12579209751531006,
+            "waterCoverage": 0.0004032630989218971
+        },
+        {
+            "id": "IHIETZIN4",
+            "greenCoverage": 0.6729005173250481,
+            "waterCoverage": 0.0008999304905295344
+        },
+        {
+            "id": "IPENZI42",
+            "greenCoverage": 0.7803735333400121,
+            "waterCoverage": 0.0007039873391917652
+        },
+        {
+            "id": "IDONAU98",
+            "greenCoverage": 0.38308672270179506,
+            "waterCoverage": 0.020010609037843206
+        },
+        {
+            "id": "IDONAU48",
+            "greenCoverage": 0.3161549205729036,
+            "waterCoverage": 0.01916704733079099
+        },
+        {
+            "id": "ISIMME21",
+            "greenCoverage": 0.3805435099000129,
+            "waterCoverage": 0.0023071431073266127
+        },
+        {
+            "id": "ILIESI21",
+            "greenCoverage": 0.1583791239501077,
+            "waterCoverage": 0.00465969599919213
+        },
+        {
+            "id": "IDONAU61",
+            "greenCoverage": 0.426663224084971,
+            "waterCoverage": 0.01106212492037819
+        },
+        {
+            "id": "IDONAU117",
+            "greenCoverage": 0.2823827219655344,
+            "waterCoverage": 0.0728390664355603
+        },
+        {
+            "id": "IMEIDL10",
+            "greenCoverage": 0.22599963807019602,
+            "waterCoverage": 0.008191468451414557
+        },
+        {
+            "id": "IOTTAK12",
+            "greenCoverage": 0.11348822645679568,
+            "waterCoverage": 0.00011071740938919648
+        },
+        {
+            "id": "IALSER5",
+            "greenCoverage": 0.17470719353413708,
+            "waterCoverage": 0.0003454524201599465
+        },
+        {
+            "id": "IFLORI62",
+            "greenCoverage": 0.35954175767470287,
+            "waterCoverage": 0.08201811608727531
+        },
+        {
+            "id": "IDONAU140",
+            "greenCoverage": 0.6491151363952209,
+            "waterCoverage": 0.05468223624166365
+        },
+        {
+            "id": "IHERNA5",
+            "greenCoverage": 0.12104680090592947,
+            "waterCoverage": 0.00030639089290471655
+        },
+        {
+            "id": "IFAVORIT3",
+            "greenCoverage": 0.21968908747114763,
+            "waterCoverage": 0.006040784811754008
+        },
+        {
+            "id": "IPENZI49",
+            "greenCoverage": 0.2975726640360883,
+            "waterCoverage": 0.00039047936477894793
+        },
+        {
+            "id": "IFLORI118",
+            "greenCoverage": 0.28703063322991,
+            "waterCoverage": 0.0059042553694799525
+        },
+        {
+            "id": "IMARGA1",
+            "greenCoverage": 0.1763086544658898,
+            "waterCoverage": 0.004534344596878254
+        },
+        {
+            "id": "IOTTAK13",
+            "greenCoverage": 0.1678077123690839,
+            "waterCoverage": 0.0004943183972232608
+        },
+        {
+            "id": "IWIENWIE21",
+            "greenCoverage": 0.31051454947037593,
+            "waterCoverage": 0.0003588254530902473
+        },
+        {
+            "id": "IDBLIN3",
+            "greenCoverage": 0.42019477436309083,
+            "waterCoverage": 0.030015876936557002
+        },
+        {
+            "id": "IHIETZ1",
+            "greenCoverage": 0.3949238890519424,
+            "waterCoverage": 0.0010024911598553168
+        },
+        {
+            "id": "ILIESI35",
+            "greenCoverage": 0.2830748537970787,
+            "waterCoverage": 0.0009840863298945179
+        },
+        {
+            "id": "IFLORI98",
+            "greenCoverage": 0.3461428133178439,
+            "waterCoverage": 0.05677797626080513
+        },
+        {
+            "id": "IMEIDL17",
+            "greenCoverage": 0.21664865304849187,
+            "waterCoverage": 0.00819333129344584
+        },
+        {
+            "id": "IDONAU129",
+            "greenCoverage": 0.35354723447972175,
+            "waterCoverage": 0.01603358196757451
+        },
+        {
+            "id": "IOTTAK10",
+            "greenCoverage": 0.10834289794552653,
+            "waterCoverage": 0
+        },
+        {
+            "id": "IFAVOR35",
+            "greenCoverage": 0.20383199225445348,
+            "waterCoverage": 0.008398752958991035
+        },
+        {
+            "id": "IFAVOR34",
+            "greenCoverage": 0.2974360965763253,
+            "waterCoverage": 0.008297642602335693
+        },
+        {
+            "id": "IWHRIN9",
+            "greenCoverage": 0.13095431748989306,
+            "waterCoverage": 0.0003454524201597614
+        },
+        {
+            "id": "ILEOPO52",
+            "greenCoverage": 0.21495526023513226,
+            "waterCoverage": 0.014784350188778998
+        },
+        {
+            "id": "IWIEDE3",
+            "greenCoverage": 0.12915573942690797,
+            "waterCoverage": 0.0004856482783667696
+        },
+        {
+            "id": "IFLORI65",
+            "greenCoverage": 0.38210684116384436,
+            "waterCoverage": 0.032472698448870706
+        },
+        {
+            "id": "IFAVOR12",
+            "greenCoverage": 0.41332001264291074,
+            "waterCoverage": 0.006259144501687785
+        },
+        {
+            "id": "IBRIGI11",
+            "greenCoverage": 0.35861271016535295,
+            "waterCoverage": 0.06542252101368908
+        },
+        {
+            "id": "IFLORIDS6",
+            "greenCoverage": 0.3035041789239667,
+            "waterCoverage": 0.006499299466326137
+        },
+        {
+            "id": "IWHRIN10",
+            "greenCoverage": 0.2416690373923794,
+            "waterCoverage": 0.00040716552565815136
+        },
+        {
+            "id": "IWIENWIE4",
+            "greenCoverage": 0.2025354818939169,
+            "waterCoverage": 0.001754688536742406
+        },
+        {
+            "id": "IDONAU114",
+            "greenCoverage": 0.4298313029704419,
+            "waterCoverage": 0.04643406996519197
+        },
+        {
+            "id": "IFAVOR1",
+            "greenCoverage": 0.20861764181579576,
+            "waterCoverage": 0.0065788353112784725
+        },
+        {
+            "id": "ILANDS104",
+            "greenCoverage": 0.39200395615508754,
+            "waterCoverage": 0.02276958057567722
+        },
+        {
+            "id": "IFAVOR33",
+            "greenCoverage": 0.44842868350294074,
+            "waterCoverage": 0.003305905317287667
+        },
+        {
+            "id": "IPENZI55",
+            "greenCoverage": 0.725975930425215,
+            "waterCoverage": 0.0009107031790866223
+        },
+        {
+            "id": "IPENZI5",
+            "greenCoverage": 0.6410777449923412,
+            "waterCoverage": 0.0009025167929449156
+        },
+        {
+            "id": "IMEIDLIN2",
+            "greenCoverage": 0.22487553510988906,
+            "waterCoverage": 0.008195563357545767
+        },
+        {
+            "id": "IFLORI131",
+            "greenCoverage": 0.22407948838181035,
+            "waterCoverage": 0.00407667836453709
+        },
+        {
+            "id": "IWIEDE13",
+            "greenCoverage": 0.1322182210210179,
+            "waterCoverage": 0.0002744059962451053
+        },
+        {
+            "id": "IDONAU138",
+            "greenCoverage": 0.29573271012371666,
+            "waterCoverage": 0.07419078160533199
+        },
+        {
+            "id": "IFLORI134",
+            "greenCoverage": 0.33662183839385906,
+            "waterCoverage": 0.07354391248675349
+        },
+        {
+            "id": "IMEIDL20",
+            "greenCoverage": 0.16512257931226987,
+            "waterCoverage": 0.002353641111693117
+        },
+        {
+            "id": "IHIETZ16",
+            "greenCoverage": 0.22313344653601913,
+            "waterCoverage": 0.0024094257150822536
+        },
+        {
+            "id": "ISIMMERI11",
+            "greenCoverage": 0.45672499892308166,
+            "waterCoverage": 0.003268831958508336
+        },
+        {
+            "id": "IHIETZIN11",
+            "greenCoverage": 0.20664379842761507,
+            "waterCoverage": 0.0002556889825343516
+        },
+        {
+            "id": "IDONAU69",
+            "greenCoverage": 0.35107520897037864,
+            "waterCoverage": 0.01917661821223511
+        },
+        {
+            "id": "ISIMME101",
+            "greenCoverage": 0.3548066787463033,
+            "waterCoverage": 0.0002463298825596697
+        },
+        {
+            "id": "IPENZI31",
+            "greenCoverage": 0.17102673292299217,
+            "waterCoverage": 0.00004574013692081023
+        },
+        {
+            "id": "IDBLIN2",
+            "greenCoverage": 0.3048526149372283,
+            "waterCoverage": 0.00040716552565812366
+        },
+        {
+            "id": "IFLORI12",
+            "greenCoverage": 0.4358758622813428,
+            "waterCoverage": 0.04178779907249016
+        },
+        {
+            "id": "IMARIA11",
+            "greenCoverage": 0.12448987091473007,
+            "waterCoverage": 0.00012836723291629297
+        },
+        {
+            "id": "IPENZI27",
+            "greenCoverage": 0.2244946112591457,
+            "waterCoverage": 0.0003588254530901039
+        },
+        {
+            "id": "ILIESI30",
+            "greenCoverage": 0.4364209470005643,
+            "waterCoverage": 0.0010766460855624223
+        },
+        {
+            "id": "IPENZI50",
+            "greenCoverage": 0.6545650633034452,
+            "waterCoverage": 0.0007332211298640195
+        },
+        {
+            "id": "IDONAU124",
+            "greenCoverage": 0.46602754788700096,
+            "waterCoverage": 0.024407836289567292
+        },
+        {
+            "id": "IWIENWIE54",
+            "greenCoverage": 0.19367352429256973,
+            "waterCoverage": 0.0040534326332723435
+        },
+        {
+            "id": "IHERNA17",
+            "greenCoverage": 0.5733213764936603,
+            "waterCoverage": 0.0005526796841890553
+        },
+        {
+            "id": "IPENZI6",
+            "greenCoverage": 0.7383075475751053,
+            "waterCoverage": 0.0009123397727162105
+        },
+        {
+            "id": "ISIMME12",
+            "greenCoverage": 0.3348547959804007,
+            "waterCoverage": 0.0035638660604075728
+        },
+        {
+            "id": "IFLORIDS5",
+            "greenCoverage": 0.1984500608849862,
+            "waterCoverage": 0.03258782690382788
+        },
+        {
+            "id": "IFLORI121",
+            "greenCoverage": 0.2273168809522278,
+            "waterCoverage": 0.00022979375271749174
+        },
+        {
+            "id": "IHERNA14",
+            "greenCoverage": 0.11506924966850328,
+            "waterCoverage": 0.00029898038705385106
+        },
+        {
+            "id": "IDONAU50",
+            "greenCoverage": 0.3944731864318824,
+            "waterCoverage": 0.01692125034945237
+        },
+        {
+            "id": "IFLORI89",
+            "greenCoverage": 0.45430328458664215,
+            "waterCoverage": 0.00018902339579112453
+        },
+        {
+            "id": "IFLORI120",
+            "greenCoverage": 0.3855565896513948,
+            "waterCoverage": 0.046235330348791966
+        },
+        {
+            "id": "IPENZI4",
+            "greenCoverage": 0.7175010120620308,
+            "waterCoverage": 0.0007154480930883809
+        },
+        {
+            "id": "IWIENWIE71",
+            "greenCoverage": 0.3834656788135804,
+            "waterCoverage": 0.0009582370433555522
+        },
+        {
+            "id": "IHIETZ10",
+            "greenCoverage": 0.5346981946885626,
+            "waterCoverage": 0.0010653593362309165
+        },
+        {
+            "id": "IFLORI109",
+            "greenCoverage": 0.3468898485463136,
+            "waterCoverage": 0.04653895897609773
+        },
+        {
+            "id": "IOTTAK19",
+            "greenCoverage": 0.348468111333063,
+            "waterCoverage": 0.000619315329610936
+        },
+        {
+            "id": "IDONAU59",
+            "greenCoverage": 0.5968065234171098,
+            "waterCoverage": 0.017727475804424464
+        },
+        {
+            "id": "IDONAU137",
+            "greenCoverage": 0.4286819993472449,
+            "waterCoverage": 0.013025569040614943
+        },
+        {
+            "id": "IMEIDLIN4",
+            "greenCoverage": 0.20936145750771898,
+            "waterCoverage": 0.002114740390925309
+        },
+        {
+            "id": "IFLORI99",
+            "greenCoverage": 0.3344757271181153,
+            "waterCoverage": 0.05853138701745017
+        },
+        {
+            "id": "IDONAU123",
+            "greenCoverage": 0.28799690426423596,
+            "waterCoverage": 0.007287985175319949
+        },
+        {
+            "id": "ISIMME103",
+            "greenCoverage": 0.4628336464383228,
+            "waterCoverage": 0.003268831958507986
+        },
+        {
+            "id": "IDONAU79",
+            "greenCoverage": 0.3337633220517462,
+            "waterCoverage": 0.01743081999829573
+        },
+        {
+            "id": "IDONAU122",
+            "greenCoverage": 0.36514943591427584,
+            "waterCoverage": 0.08590555301909689
+        },
+        {
+            "id": "ISIMME102",
+            "greenCoverage": 0.4628336464383228,
+            "waterCoverage": 0.003268831958507986
+        }
+    ]
+}

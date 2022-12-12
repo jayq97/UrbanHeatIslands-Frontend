@@ -28,6 +28,8 @@ import Gewässer from "../../data/gewässer/Gewässer.json";
 // Grünflächen GeoJSON
 import Grünfläche from "../../data/grünflächen/Grünfläche.json";
 
+import CoverageData from "../../data/areaCoverage/Flächenabdeckung.json";
+
 // Bezirke GeoJSON
 import InnereStadt from "../../data/bezirke/InnereStadt.json";
 import Leopoldstadt from "../../data/bezirke/Leopoldstadt.json";
@@ -159,180 +161,226 @@ const Map = ({ district }) => {
       station.time !== null
   );
 
-  GetCoverageForStation(stations, Grünfläche, 3);
-  GetCoverageForStation(stations, Gewässer, 3);
+  //GetCoverageForStation(stations, 3);
 
   return (
     <>
       <table style={{ width: "100%" }}>
-        <tr>
-          <th>
-            {/* Die normale Map */}
-            <MapContainer
-              center={[48.210033, 16.363449]}
-              zoom={12}
-              scrollWheelZoom={true}
-              ref={(ref) => {
-                setMap(ref);
-              }}
-            >
-              {/* Layer-Controls
+        <tbody>
+          <tr>
+            <th>
+              {/* Die normale Map */}
+              <MapContainer
+                center={[48.210033, 16.363449]}
+                zoom={12}
+                scrollWheelZoom={true}
+                ref={(ref) => {
+                  setMap(ref);
+                }}
+              >
+                {/* Layer-Controls
                 Baselayer: Mapauswahl (Radiobuttons)
                 Overlay: GeoJSON-Anzeige (Checkboxes)
               */}
-              <LayersControl position="topright">
-                {/* Standardmap */}
-                <LayersControl.BaseLayer checked name="Standardeinstellung">
-                  <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  />
-                </LayersControl.BaseLayer>
-                {/* Satellitenmap */}
-                <LayersControl.BaseLayer name="Satellit">
-                  <TileLayer
-                    url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
-                    maxZoom={20}
-                    subdomains={["mt1", "mt2", "mt3"]}
-                  />
-                </LayersControl.BaseLayer>
+                <LayersControl position="topright">
+                  {/* Standardmap */}
+                  <LayersControl.BaseLayer checked name="Standardeinstellung">
+                    <TileLayer
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                  </LayersControl.BaseLayer>
+                  {/* Satellitenmap */}
+                  <LayersControl.BaseLayer name="Satellit">
+                    <TileLayer
+                      url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+                      maxZoom={20}
+                      subdomains={["mt1", "mt2", "mt3"]}
+                    />
+                  </LayersControl.BaseLayer>
 
-                {/* Wetterstationen */}
-                <LayersControl.Overlay checked name="Wetterstationen">
-                  <LayerGroup>
-                    {/* Marker der Wetterstationen werden gesetzt mit einem Popup (wenn man auf den Marker drückt) mit den zugehörigen Daten */}
-                    {district
-                      ? stations.map((station) => (
-                          <Marker
-                            key={station.station_id}
-                            position={[station.lat, station.lon]}
-                            // Das Icon hängt von dem Temperaturbereich ab (siehe renderStationColor() Funktion)
-                            icon={L.divIcon({
-                              iconAnchor: [0, 24],
-                              labelAnchor: [-6, 0],
-                              popupAnchor: [0, -36],
-                              html: `<h2 style="${renderStationColor(
-                                station.temp
-                              )}" />${
-                                station.temp !== null
-                                  ? Math.trunc(station.temp) // Die Nachkommastellen der Temperatur werden gestutzt
-                                  : ""
-                              }</h2>`,
-                            })}
-                          >
-                            {/* Wenn man auf den Marker drückt, wird ein Popup mit den zugehörigen Daten angezeigt */}
-                            <Popup
+                  {/* Wetterstationen */}
+                  <LayersControl.Overlay checked name="Wetterstationen">
+                    <LayerGroup>
+                      {/* Marker der Wetterstationen werden gesetzt mit einem Popup (wenn man auf den Marker drückt) mit den zugehörigen Daten */}
+                      {district
+                        ? stations.map((station) => (
+                            <Marker
+                              key={station.station_id}
                               position={[station.lat, station.lon]}
-                              width="auto"
+                              // Das Icon hängt von dem Temperaturbereich ab (siehe renderStationColor() Funktion)
+                              icon={L.divIcon({
+                                iconAnchor: [0, 24],
+                                labelAnchor: [-6, 0],
+                                popupAnchor: [0, -36],
+                                html: `<h2 style="${renderStationColor(
+                                  station.temp
+                                )}" />${
+                                  station.temp !== null
+                                    ? Math.trunc(station.temp) // Die Nachkommastellen der Temperatur werden gestutzt
+                                    : ""
+                                }</h2>`,
+                              })}
                             >
-                              <div>
-                                <h1>{station.neighborhood}</h1>
-                                <h2>{station.station_id}</h2>
-                                <hr width="auto" />
-                                <br />
-                                <table style={{ width: "100%" }}>
-                                  <tr>
-                                    <th style={{ textAlign: "right" }}>
-                                      Temperatur:{" "}
-                                    </th>
-                                    <td>{station.temp} °C</td>
-                                  </tr>
-                                  <tr>
-                                    <th style={{ textAlign: "right" }}>
-                                      Feuchtigkeit:{" "}
-                                    </th>
-                                    <td>{station.humidity} %</td>
-                                  </tr>
-                                  <tr>
-                                    <th style={{ textAlign: "right" }}>
-                                      Windgeschwindigkeit:{" "}
-                                    </th>
-                                    <td>{station.windspeed} km/h</td>
-                                  </tr>
-                                  <tr>
-                                    <th style={{ textAlign: "right" }}>
-                                      Luftdruck:{" "}
-                                    </th>
-                                    <td>{station.pressure} mbar</td>
-                                  </tr>
-                                  <tr>
-                                    <th style={{ textAlign: "right" }}>
-                                      Höhe über dem Meeresspiegel:{" "}
-                                    </th>
-                                    <td>{station.elevation} m</td>
-                                  </tr>
-                                </table>
-                                <p className="font">
-                                  Zuletzt aktualisiert am:{" "}
-                                  {Moment(station.time).format("LLLL")}
-                                </p>
-                              </div>
-                            </Popup>
-                          </Marker>
-                        ))
-                      : ""}
-                  </LayerGroup>
-                </LayersControl.Overlay>
-                {/* Bezirke GeoJSON */}
-                <LayersControl.Overlay checked name="Bezirksgrenzen">
-                  <LayerGroup>
-                    {/* Bezirks-GeoJSON wird je nach Bezirk eingebunden*/}
-                    {district ? renderGeoJSON(district) : ""}
-                  </LayerGroup>
-                </LayersControl.Overlay>
-                {/* Gewässer GeoJSON */}
-                <LayersControl.Overlay name="Gewässer">
-                  <LayerGroup>
-                    <GeoJSON data={Gewässer} />
-                  </LayerGroup>
-                </LayersControl.Overlay>
-                {/* Grünflächen GeoJSON */}
-                <LayersControl.Overlay name="Grünfläche">
-                  <LayerGroup>
-                    <GeoJSON data={Grünfläche} style={{ color: "green" }} />
-                  </LayerGroup>
-                </LayersControl.Overlay>
-              </LayersControl>
+                              {/* Wenn man auf den Marker drückt, wird ein Popup mit den zugehörigen Daten angezeigt */}
+                              <Popup
+                                position={[station.lat, station.lon]}
+                                width="auto"
+                              >
+                                <div>
+                                  <h1>{station.neighborhood}</h1>
+                                  <h2>{station.station_id}</h2>
+                                  <hr width="auto" />
+                                  <br />
+                                  <table style={{ width: "100%" }}>
+                                    <tbody>
+                                      <tr>
+                                        <th style={{ textAlign: "right" }}>
+                                          Temperatur:{" "}
+                                        </th>
+                                        <td>{station.temp} °C</td>
+                                      </tr>
+                                      <tr>
+                                        <th style={{ textAlign: "right" }}>
+                                          Feuchtigkeit:{" "}
+                                        </th>
+                                        <td>{station.humidity} %</td>
+                                      </tr>
+                                      <tr>
+                                        <th style={{ textAlign: "right" }}>
+                                          Windgeschwindigkeit:{" "}
+                                        </th>
+                                        <td>{station.windspeed} km/h</td>
+                                      </tr>
+                                      <tr>
+                                        <th style={{ textAlign: "right" }}>
+                                          Luftdruck:{" "}
+                                        </th>
+                                        <td>{station.pressure} mbar</td>
+                                      </tr>
+                                      <tr>
+                                        <th style={{ textAlign: "right" }}>
+                                          Höhe über dem Meeresspiegel:{" "}
+                                        </th>
+                                        <td>{station.elevation} m</td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                  <br />
+                                  <table>
+                                    <tbody>
+                                      <tr>
+                                        <th style={{ textAlign: "right" }}>
+                                          Grünflächen-Abdeckung (
+                                          {CoverageData.radius} km Radius):
+                                        </th>
+                                        <td>
+                                          {parseFloat(
+                                            CoverageData.data
+                                              .filter(
+                                                (element) =>
+                                                  element.id ===
+                                                  station.station_id
+                                              )
+                                              .map((id) => id.greenCoverage)
+                                              .at(0) * 100
+                                          ).toFixed(2)}{" "}
+                                          %
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <th style={{ textAlign: "right" }}>
+                                          Wasserflächen-Abdeckung (
+                                          {CoverageData.radius} km Radius):
+                                        </th>
+                                        <td>
+                                          {parseFloat(
+                                            CoverageData.data
+                                              .filter(
+                                                (element) =>
+                                                  element.id ===
+                                                  station.station_id
+                                              )
+                                              .map((id) => id.waterCoverage)
+                                              .at(0) * 100
+                                          ).toFixed(2)}{" "}
+                                          %
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                  <p className="font">
+                                    Zuletzt aktualisiert am:{" "}
+                                    {Moment(station.time).format("LLLL")}
+                                  </p>
+                                </div>
+                              </Popup>
+                            </Marker>
+                          ))
+                        : ""}
+                    </LayerGroup>
+                  </LayersControl.Overlay>
+                  {/* Bezirke GeoJSON */}
+                  <LayersControl.Overlay checked name="Bezirksgrenzen">
+                    <LayerGroup>
+                      {/* Bezirks-GeoJSON wird je nach Bezirk eingebunden*/}
+                      {district ? renderGeoJSON(district) : ""}
+                    </LayerGroup>
+                  </LayersControl.Overlay>
+                  {/* Gewässer GeoJSON */}
+                  <LayersControl.Overlay name="Gewässer">
+                    <LayerGroup>
+                      <GeoJSON data={Gewässer} />
+                    </LayerGroup>
+                  </LayersControl.Overlay>
+                  {/* Grünflächen GeoJSON */}
+                  <LayersControl.Overlay name="Grünfläche">
+                    <LayerGroup>
+                      <GeoJSON data={Grünfläche} style={{ color: "green" }} />
+                    </LayerGroup>
+                  </LayersControl.Overlay>
+                </LayersControl>
 
-              {/* Die Legende wird in der Map eingebunden */}
-              <Legend map={map} />
-            </MapContainer>
-          </th>
-        </tr>
-        <tr>
-          <th>
-            {/* Die Heatmap */}
-            <MapContainer
-              center={[48.210033, 16.363449]}
-              zoom={12}
-              minZoom={10}
-              maxZoom={12}
-              scrollWheelZoom={true}
-              ref={(ref) => {
-                setMap2(ref);
-              }}
-            >
-              <LayersControl position="topright">
-                <LayersControl.BaseLayer checked name="Standardeinstellung">
-                  <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  />
-                </LayersControl.BaseLayer>
-                <LayersControl.BaseLayer name="Satellit">
-                  <TileLayer
-                    url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
-                    maxZoom={20}
-                    subdomains={["mt1", "mt2", "mt3"]}
-                  />
-                </LayersControl.BaseLayer>
-              </LayersControl>
+                {/* Die Legende wird in der Map eingebunden */}
+                <Legend map={map} />
+              </MapContainer>
+            </th>
+          </tr>
+          <tr>
+            <th>
+              {/* Die Heatmap */}
+              <MapContainer
+                center={[48.210033, 16.363449]}
+                zoom={12}
+                minZoom={10}
+                maxZoom={12}
+                scrollWheelZoom={true}
+                ref={(ref) => {
+                  setMap2(ref);
+                }}
+              >
+                <LayersControl position="topright">
+                  <LayersControl.BaseLayer checked name="Standardeinstellung">
+                    <TileLayer
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                  </LayersControl.BaseLayer>
+                  <LayersControl.BaseLayer name="Satellit">
+                    <TileLayer
+                      url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+                      maxZoom={20}
+                      subdomains={["mt1", "mt2", "mt3"]}
+                    />
+                  </LayersControl.BaseLayer>
+                </LayersControl>
 
-              {/* Die Heatlayer wird in der Heatmap eingebunden mit allen Wetterstationen */}
-              <HeatLayer map={map2} stations={stations} />
-            </MapContainer>
-          </th>
-        </tr>
+                {/* Die Heatlayer wird in der Heatmap eingebunden mit allen Wetterstationen */}
+                <HeatLayer map={map2} stations={stations} />
+              </MapContainer>
+            </th>
+          </tr>
+        </tbody>
       </table>
     </>
   );
@@ -463,91 +511,93 @@ const getGeoJSONComponent = (
           <hr width="auto" />
           <br />
           <table>
-            <tr>
-              <th
-                style={{
-                  borderLeft: "1px solid white",
-                  borderTop: "1px solid white",
-                }}
-              ></th>
-              <td>min</td>
-              <td>Ø</td>
-              <td>max</td>
-            </tr>
-            <tr>
-              <th style={{ textAlign: "right" }}>Temperatur (°C):</th>
-              <td>
-                {tempArray[index]?.min !== null
-                  ? tempArray[index]?.min
-                  : "keine Daten"}
-              </td>
-              <td>
-                {tempArray[index]?.avg !== null
-                  ? tempArray[index]?.avg
-                  : "keine Daten"}
-              </td>
-              <td>
-                {tempArray[index]?.max !== null
-                  ? tempArray[index]?.max
-                  : "keine Daten"}
-              </td>
-            </tr>
-            <tr>
-              <th style={{ textAlign: "right" }}>Feuchtigkeit (%):</th>
-              <td>
-                {humidityArray[index]?.min !== null
-                  ? humidityArray[index]?.min
-                  : "keine Daten"}
-              </td>
-              <td>
-                {humidityArray[index]?.avg !== null
-                  ? humidityArray[index]?.avg
-                  : "keine Daten"}
-              </td>
-              <td>
-                {humidityArray[index]?.max !== null
-                  ? humidityArray[index]?.max
-                  : "keine Daten"}
-              </td>
-            </tr>
-            <tr>
-              <th style={{ textAlign: "right" }}>
-                Windgeschwindigkeit (km/h):
-              </th>
-              <td>
-                {windspeedArray[index]?.min !== null
-                  ? windspeedArray[index]?.min
-                  : "keine Daten"}
-              </td>
-              <td>
-                {windspeedArray[index]?.avg !== null
-                  ? windspeedArray[index]?.avg
-                  : "keine Daten"}
-              </td>
-              <td>
-                {windspeedArray[index]?.max !== null
-                  ? windspeedArray[index]?.max
-                  : "keine Daten"}
-              </td>
-            </tr>
-            <tr>
-              <th style={{ textAlign: "right" }}>Luftdruck (mbar):</th>
-              <td>
-                {pressureArray[index]?.min !== null
-                  ? pressureArray[index]?.min
-                  : "keine Daten"}
-              </td>
-              <td>
-                {pressureArray[index]?.avg !== null
-                  ? pressureArray[index]?.avg
-                  : "keine Daten"}
-              </td>
-              <td>
-                {pressureArray[index]?.max !== null
-                  ? pressureArray[index]?.max
-                  : "keine Daten"}
-              </td>
-            </tr>
+            <tbody>
+              <tr>
+                <th
+                  style={{
+                    borderLeft: "1px solid white",
+                    borderTop: "1px solid white",
+                  }}
+                ></th>
+                <td>min</td>
+                <td>Ø</td>
+                <td>max</td>
+              </tr>
+              <tr>
+                <th style={{ textAlign: "right" }}>Temperatur (°C):</th>
+                <td>
+                  {tempArray[index]?.min !== null
+                    ? tempArray[index]?.min
+                    : "keine Daten"}
+                </td>
+                <td>
+                  {tempArray[index]?.avg !== null
+                    ? tempArray[index]?.avg
+                    : "keine Daten"}
+                </td>
+                <td>
+                  {tempArray[index]?.max !== null
+                    ? tempArray[index]?.max
+                    : "keine Daten"}
+                </td>
+              </tr>
+              <tr>
+                <th style={{ textAlign: "right" }}>Feuchtigkeit (%):</th>
+                <td>
+                  {humidityArray[index]?.min !== null
+                    ? humidityArray[index]?.min
+                    : "keine Daten"}
+                </td>
+                <td>
+                  {humidityArray[index]?.avg !== null
+                    ? humidityArray[index]?.avg
+                    : "keine Daten"}
+                </td>
+                <td>
+                  {humidityArray[index]?.max !== null
+                    ? humidityArray[index]?.max
+                    : "keine Daten"}
+                </td>
+              </tr>
+              <tr>
+                <th style={{ textAlign: "right" }}>
+                  Windgeschwindigkeit (km/h):
+                </th>
+                <td>
+                  {windspeedArray[index]?.min !== null
+                    ? windspeedArray[index]?.min
+                    : "keine Daten"}
+                </td>
+                <td>
+                  {windspeedArray[index]?.avg !== null
+                    ? windspeedArray[index]?.avg
+                    : "keine Daten"}
+                </td>
+                <td>
+                  {windspeedArray[index]?.max !== null
+                    ? windspeedArray[index]?.max
+                    : "keine Daten"}
+                </td>
+              </tr>
+              <tr>
+                <th style={{ textAlign: "right" }}>Luftdruck (mbar):</th>
+                <td>
+                  {pressureArray[index]?.min !== null
+                    ? pressureArray[index]?.min
+                    : "keine Daten"}
+                </td>
+                <td>
+                  {pressureArray[index]?.avg !== null
+                    ? pressureArray[index]?.avg
+                    : "keine Daten"}
+                </td>
+                <td>
+                  {pressureArray[index]?.max !== null
+                    ? pressureArray[index]?.max
+                    : "keine Daten"}
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </Popup>
@@ -599,9 +649,7 @@ const getMinMaxAvgValues = (array) => {
   return { min: min, max: max, avg: avg };
 };
 
-const GetCoverageForStation = (stations, GeoJSON, radius) => {
-  //let array = [];
-
+const GetCoverageForStation = (stations, radius) => {
   useEffect(() => {
     let allCircles = [];
     stations.forEach((element) => {
@@ -613,11 +661,12 @@ const GetCoverageForStation = (stations, GeoJSON, radius) => {
     });
 
     if (allCircles.length !== 0) {
-      let array = [];
+      let dataArray = [];
       allCircles.forEach((circle, index) => {
-        let percentageArray = [];
-        var multiPolygonInter = [];
-        GeoJSON.geometry.coordinates.forEach((greenElement, index2) => {
+        let greenCoverageArray = [];
+        let waterCoverageArray = [];
+
+        Grünfläche.geometry.coordinates.forEach((greenElement, index2) => {
           let intersection = turf.intersect(
             circle[1],
             turf.polygon(greenElement)
@@ -628,28 +677,57 @@ const GetCoverageForStation = (stations, GeoJSON, radius) => {
             var circleArea = turf.area(circle[1]);
             var interLayerArea = turf.area(intersection);
 
-            multiPolygonInter.push(intersection);
             // Calculate how much of intersection is covered.
 
             var areaPercentage = interLayerArea / circleArea;
 
-            percentageArray.push(areaPercentage);
+            greenCoverageArray.push(areaPercentage);
           }
         });
 
-        var obj = {
+        Gewässer.geometry.coordinates.forEach((waterElement, index2) => {
+          let intersection = turf.intersect(
+            circle[1],
+            turf.polygon(waterElement)
+          );
+          if (intersection !== null) {
+            //L.geoJson(intersection).addTo(map);
+
+            var circleArea = turf.area(circle[1]);
+            var interLayerArea = turf.area(intersection);
+
+            // Calculate how much of intersection is covered.
+
+            var areaPercentage = interLayerArea / circleArea;
+
+            waterCoverageArray.push(areaPercentage);
+          }
+        });
+        dataArray.push({
           id: circle[0],
-          featureGroup: multiPolygonInter,
-          coverage: percentageArray.reduce(
+          greenCoverage: greenCoverageArray.reduce(
             (a, b) => parseFloat(a) + parseFloat(b),
             0
           ),
-        };
-        array.push(obj);
+          waterCoverage: waterCoverageArray.reduce(
+            (a, b) => parseFloat(a) + parseFloat(b),
+            0
+          ),
+        });
+        console.log(index + "/" + allCircles.length);
       });
-      GeoJSON === Grünfläche
-        ? console.log("Grünflächenabdeckung: ", array)
-        : console.log("Wasserflächenabdeckung: ", array);
+      var nameOfCoverage = "Flächenabdeckung";
+
+      var obj = {
+        radius: radius,
+        data: dataArray,
+      };
+
+      var FileSaver = require("file-saver");
+      var blob = new Blob([JSON.stringify(obj)], {
+        type: "application/json",
+      });
+      FileSaver.saveAs(blob, nameOfCoverage + ".json");
     }
-  }, [stations, GeoJSON, radius]);
+  }, [stations, radius]);
 };
