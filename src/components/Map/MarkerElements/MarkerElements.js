@@ -134,7 +134,7 @@ export const MarkerNoTemp = `
   display: block;
   left: -1rem;
   top: -1rem;
-  color: #FFFFFF;
+  color: #000000;
   position: relative;
   border-radius: 2rem 2rem 0;
   transform: rotate(45deg);

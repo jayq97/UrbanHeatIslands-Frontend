@@ -13,7 +13,6 @@ import {
 } from "chart.js";
 
 import { Line } from "react-chartjs-2";
-import { getStaticContextFromError } from "@remix-run/router";
 
 ChartJS.register(
   CategoryScale,
@@ -47,7 +46,7 @@ export const options1 = {
   plugins: {
     title: {
       display: true,
-      text: "Chart.js Line Chart - Multi Axis",
+      text: "Durchschnitt in den letzten 14 Tagen",
     },
   },
   scales: {
@@ -95,7 +94,7 @@ export const options2 = {
   plugins: {
     title: {
       display: true,
-      text: "Chart.js Line Chart - Multi Axis",
+      text: "Durchschnitt in den letzten 14 Tagen",
     },
   },
   scales: {
@@ -127,7 +126,7 @@ export const options2 = {
       },
       title: {
         display: true,
-        text: "Luftdruck (mbar)",
+        text: "Luftdruck (hPa)",
       },
     },
   },
@@ -135,23 +134,29 @@ export const options2 = {
 
 const Data1 = (stations: Array<any>) => {
   return {
-    labels: [...new Set(stations.map((station: any) => station.timeString))],
+    labels: Object.keys(stations).slice(
+      Math.max(Object.keys(stations).length - 14, 1)
+    ),
     datasets: [
       {
         label: "Temperatur (°C)",
-        data: stations.map((item: any) => item.temp),
+        data: Object.values(groupAverageData(stations, "temp")).slice(
+          Math.max(Object.values(stations).length - 14, 1)
+        ),
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
         yAxisID: "y",
-        tension: 0.4,
+        tension: 0.5,
       },
       {
         label: "Feuchtigkeit (%)",
-        data: stations.map((item: any) => item.humidity),
+        data: Object.values(groupAverageData(stations, "humidity")).slice(
+          Math.max(Object.values(stations).length - 14, 1)
+        ),
         borderColor: "rgb(53, 162, 235)",
         backgroundColor: "rgba(53, 162, 235, 0.5)",
         yAxisID: "y1",
-        tension: 0.4,
+        tension: 0.5,
       },
     ],
   };
@@ -159,35 +164,77 @@ const Data1 = (stations: Array<any>) => {
 
 const Data2 = (stations: Array<any>) => {
   return {
-    labels: [...new Set(stations.map((station: any) => station.timeString))],
+    labels: Object.keys(stations).slice(
+      Math.max(Object.keys(stations).length - 14, 1)
+    ),
     datasets: [
       {
         label: "Windgeschwindigkeit (km/h)",
-        data: stations.map((item: any) => item.windspeed),
+        data: Object.values(groupAverageData(stations, "windspeed")).slice(
+          Math.max(Object.values(stations).length - 14, 1)
+        ),
         borderColor: "rgb(255, 206, 86)",
         backgroundColor: "rgba(255, 206, 86, 0.5)",
         yAxisID: "y2",
-        tension: 0.4,
+        tension: 0.5,
       },
       {
-        label: "Luftdruck (mbar)",
-        data: stations.map((item: any) => item.pressure),
+        label: "Luftdruck (hPa)",
+        data: Object.values(groupAverageData(stations, "pressure")).slice(
+          Math.max(Object.values(stations).length - 14, 1)
+        ),
         borderColor: "rgb(75, 192, 192)",
         backgroundColor: "rgba(75, 192, 192, 0.5)",
         yAxisID: "y3",
-        tension: 0.4,
+        tension: 0.5,
       },
     ],
   };
 };
 
-const timeStringFunction = (obj: any) => {
-  var date = new Date(obj.time);
+const groupData = (array: any) => {
+  return array.reduce((memo: any, item: any) => {
+    if (!memo[item.timeString]) {
+      memo[item.timeString] = {
+        temp: 0,
+        humidity: 0,
+        windspeed: 0,
+        pressure: 0,
+        count: 0,
+      };
+    }
+
+    memo[item.timeString].temp += Number(item.temp);
+    memo[item.timeString].humidity += Number(item.humidity);
+    memo[item.timeString].windspeed += Number(item.windspeed);
+    memo[item.timeString].pressure += Number(item.pressure);
+    memo[item.timeString].count += 1;
+    return memo;
+  }, {});
+};
+
+const groupAverageData = (array: any, element: any) => {
+  return Object.keys(array).reduce(function (memo: any, key: any) {
+    if (element === "temp") {
+      memo[key] = array[key].temp / array[key].count;
+    } else if (element === "humidity") {
+      memo[key] = array[key].humidity / array[key].count;
+    } else if (element === "windspeed") {
+      memo[key] = array[key].windspeed / array[key].count;
+    } else {
+      memo[key] = array[key].pressure / array[key].count;
+    }
+    return memo;
+  }, {});
+};
+
+const timeStringFunction = (time: any) => {
+  var date = new Date(time);
   var dd = date.getDate();
-  var mm = date.getMonth();
+  var mm = date.getMonth() + 1;
   var yyyy = date.getFullYear();
-  var hours = date.getHours();
-  return dd + "." + mm + "." + yyyy + " " + hours + " Uhr";
+  var hh = date.getHours();
+  return dd + "." + mm + "." + yyyy;
 };
 
 const WeatherData = () => {
@@ -200,10 +247,15 @@ const WeatherData = () => {
         station.pressure !== null &&
         station.time !== null
     )
+    .sort(function (a: any, b: any) {
+      return a.time.localeCompare(b.time);
+    })
     .map((obj: any) => ({
       ...obj,
-      timeString: timeStringFunction(obj),
+      timeString: timeStringFunction(obj.time),
     }));
+
+  let array = groupData(stations);
 
   return (
     <div
@@ -213,8 +265,13 @@ const WeatherData = () => {
       className="container"
     >
       <h1>Wetterdaten in Wien</h1>
-      <Line options={options1} data={Data1(stations)} />
-      <Line options={options2} data={Data2(stations)} />
+      <h2 style={{ textAlign: "center" }}>Temperatur & Feuchtigkeit</h2>
+      <Line options={options1} data={Data1(array)} />
+      <br />
+      <br />
+      <br />
+      <h2 style={{ textAlign: "center" }}>Windgeschwindigkeit & Luftdruck</h2>
+      <Line options={options2} data={Data2(array)} />
     </div>
   );
 };

@@ -154,14 +154,14 @@ const Map = ({ district }) => {
       district !== 0 &&
       station.lat &&
       station.lon &&
-      station.temp !== null &&
-      station.humidity !== null &&
-      station.windspeed !== null &&
-      station.pressure !== null &&
-      station.time !== null
+      station.temp != null &&
+      station.humidity != null &&
+      station.windspeed != null &&
+      station.pressure != null &&
+      station.time != null
   );
 
-  //GetCoverageForStation(stations, 3);
+  //GetCoverageForStation(stations, 3, map);
 
   return (
     <>
@@ -216,7 +216,7 @@ const Map = ({ district }) => {
                                 html: `<h2 style="${renderStationColor(
                                   station.temp
                                 )}" />${
-                                  station.temp !== null
+                                  station.temp != null
                                     ? Math.trunc(station.temp) // Die Nachkommastellen der Temperatur werden gestutzt
                                     : ""
                                 }</h2>`,
@@ -256,7 +256,7 @@ const Map = ({ district }) => {
                                         <th style={{ textAlign: "right" }}>
                                           Luftdruck:{" "}
                                         </th>
-                                        <td>{station.pressure} mbar</td>
+                                        <td>{station.pressure} hPa</td>
                                       </tr>
                                       <tr>
                                         <th style={{ textAlign: "right" }}>
@@ -352,7 +352,7 @@ const Map = ({ district }) => {
               <MapContainer
                 center={[48.210033, 16.363449]}
                 zoom={12}
-                minZoom={10}
+                minZoom={11}
                 maxZoom={12}
                 scrollWheelZoom={true}
                 ref={(ref) => {
@@ -403,11 +403,11 @@ const renderGeoJSON = (district) => {
         district !== 0 &&
         station.lat &&
         station.lon &&
-        station.temp !== null &&
-        station.humidity !== null &&
-        station.windspeed !== null &&
-        station.pressure !== null &&
-        station.time !== null
+        station.temp != null &&
+        station.humidity != null &&
+        station.windspeed != null &&
+        station.pressure != null &&
+        station.time != null
     );
 
     tempArray.push(
@@ -526,17 +526,17 @@ const getGeoJSONComponent = (
               <tr>
                 <th style={{ textAlign: "right" }}>Temperatur (°C):</th>
                 <td>
-                  {tempArray[index]?.min !== null
+                  {tempArray[index]?.min != null
                     ? tempArray[index]?.min
                     : "keine Daten"}
                 </td>
                 <td>
-                  {tempArray[index]?.avg !== null
+                  {tempArray[index]?.avg != null
                     ? tempArray[index]?.avg
                     : "keine Daten"}
                 </td>
                 <td>
-                  {tempArray[index]?.max !== null
+                  {tempArray[index]?.max != null
                     ? tempArray[index]?.max
                     : "keine Daten"}
                 </td>
@@ -544,17 +544,17 @@ const getGeoJSONComponent = (
               <tr>
                 <th style={{ textAlign: "right" }}>Feuchtigkeit (%):</th>
                 <td>
-                  {humidityArray[index]?.min !== null
+                  {humidityArray[index]?.min != null
                     ? humidityArray[index]?.min
                     : "keine Daten"}
                 </td>
                 <td>
-                  {humidityArray[index]?.avg !== null
+                  {humidityArray[index]?.avg != null
                     ? humidityArray[index]?.avg
                     : "keine Daten"}
                 </td>
                 <td>
-                  {humidityArray[index]?.max !== null
+                  {humidityArray[index]?.max != null
                     ? humidityArray[index]?.max
                     : "keine Daten"}
                 </td>
@@ -564,35 +564,35 @@ const getGeoJSONComponent = (
                   Windgeschwindigkeit (km/h):
                 </th>
                 <td>
-                  {windspeedArray[index]?.min !== null
+                  {windspeedArray[index]?.min != null
                     ? windspeedArray[index]?.min
                     : "keine Daten"}
                 </td>
                 <td>
-                  {windspeedArray[index]?.avg !== null
+                  {windspeedArray[index]?.avg != null
                     ? windspeedArray[index]?.avg
                     : "keine Daten"}
                 </td>
                 <td>
-                  {windspeedArray[index]?.max !== null
+                  {windspeedArray[index]?.max != null
                     ? windspeedArray[index]?.max
                     : "keine Daten"}
                 </td>
               </tr>
               <tr>
-                <th style={{ textAlign: "right" }}>Luftdruck (mbar):</th>
+                <th style={{ textAlign: "right" }}>Luftdruck (hPa):</th>
                 <td>
-                  {pressureArray[index]?.min !== null
+                  {pressureArray[index]?.min != null
                     ? pressureArray[index]?.min
                     : "keine Daten"}
                 </td>
                 <td>
-                  {pressureArray[index]?.avg !== null
+                  {pressureArray[index]?.avg != null
                     ? pressureArray[index]?.avg
                     : "keine Daten"}
                 </td>
                 <td>
-                  {pressureArray[index]?.max !== null
+                  {pressureArray[index]?.max != null
                     ? pressureArray[index]?.max
                     : "keine Daten"}
                 </td>
@@ -622,7 +622,7 @@ const renderStationColor = (temp) => {
 
 // Farbe der Bezirks-GeoJSON wird nach Temperaturbereich zurückgegeben
 const renderGeoJSONColor = (temp) => {
-  if (temp === null) return "#FFFFFF";
+  if (temp == null) return "#FFFFFF";
   else if (temp < 1.0) return "#8DD0F3"; // < 0°C
   else if (temp >= 1.0 && temp < 5.0) return "#83C18C"; // 0-5°C
   else if (temp >= 5.0 && temp < 10.0) return "#75B360"; // 5-10°C
@@ -649,7 +649,7 @@ const getMinMaxAvgValues = (array) => {
   return { min: min, max: max, avg: avg };
 };
 
-const GetCoverageForStation = (stations, radius) => {
+const GetCoverageForStation = (stations, radius, map) => {
   useEffect(() => {
     let allCircles = [];
     stations.forEach((element) => {
@@ -671,8 +671,8 @@ const GetCoverageForStation = (stations, radius) => {
             circle[1],
             turf.polygon(greenElement)
           );
-          if (intersection !== null) {
-            //L.geoJson(intersection).addTo(map);
+          if (intersection != null) {
+            L.geoJson(intersection, { style: { color: "green" } }).addTo(map);
 
             var circleArea = turf.area(circle[1]);
             var interLayerArea = turf.area(intersection);
@@ -690,8 +690,8 @@ const GetCoverageForStation = (stations, radius) => {
             circle[1],
             turf.polygon(waterElement)
           );
-          if (intersection !== null) {
-            //L.geoJson(intersection).addTo(map);
+          if (intersection != null) {
+            L.geoJson(intersection, { style: { color: "blue" } }).addTo(map);
 
             var circleArea = turf.area(circle[1]);
             var interLayerArea = turf.area(intersection);
@@ -729,5 +729,5 @@ const GetCoverageForStation = (stations, radius) => {
       });
       FileSaver.saveAs(blob, nameOfCoverage + ".json");
     }
-  }, [stations, radius]);
+  }, [stations, radius, map]);
 };

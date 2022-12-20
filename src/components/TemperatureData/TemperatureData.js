@@ -46,13 +46,13 @@ const TemperatureData = ({ district }) => {
     .filter(
       (station) =>
         district !== 0 &&
-        station.lat &&
-        station.lon &&
-        station.temp !== null &&
-        station.humidity !== null &&
-        station.windspeed !== null &&
-        station.pressure !== null &&
-        station.time !== null
+        station.lat != null &&
+        station.lon != null &&
+        station.temp != null &&
+        station.humidity != null &&
+        station.windspeed != null &&
+        station.pressure != null &&
+        station.time != null
     );
 
   let temp = getMinMaxAvgValues(
@@ -85,27 +85,27 @@ const TemperatureData = ({ district }) => {
           </tr>
           <tr style={{ fontSize: "16px" }} key="TempTotal">
             <th style={{ textAlign: "right" }}>Temperatur (°C):</th>
-            <td>{temp.min !== null ? temp.min : "keine Daten"}</td>
-            <td>{temp.avg !== null ? temp.avg : "keine Daten"}</td>
-            <td>{temp.max !== null ? temp.max : "keine Daten"}</td>
+            <td>{temp.min != null ? temp.min : "keine Daten"}</td>
+            <td>{temp.avg != null ? temp.avg : "keine Daten"}</td>
+            <td>{temp.max != null ? temp.max : "keine Daten"}</td>
           </tr>
           <tr style={{ fontSize: "16px" }} key="HumidityTotal">
             <th style={{ textAlign: "right" }}>Feuchtigkeit (%):</th>
-            <td>{humidity.min !== null ? humidity.min : "keine Daten"}</td>
-            <td>{humidity.avg !== null ? humidity.avg : "keine Daten"}</td>
-            <td>{humidity.max !== null ? humidity.max : "keine Daten"}</td>
+            <td>{humidity.min != null ? humidity.min : "keine Daten"}</td>
+            <td>{humidity.avg != null ? humidity.avg : "keine Daten"}</td>
+            <td>{humidity.max != null ? humidity.max : "keine Daten"}</td>
           </tr>
           <tr style={{ fontSize: "16px" }} key="WindspeedTotal">
             <th style={{ textAlign: "right" }}>Windgeschwindigkeit (km/h):</th>
-            <td>{windspeed.min !== null ? windspeed.min : "keine Daten"}</td>
-            <td>{windspeed.avg !== null ? windspeed.avg : "keine Daten"}</td>
-            <td>{windspeed.max !== null ? windspeed.max : "keine Daten"}</td>
+            <td>{windspeed.min != null ? windspeed.min : "keine Daten"}</td>
+            <td>{windspeed.avg != null ? windspeed.avg : "keine Daten"}</td>
+            <td>{windspeed.max != null ? windspeed.max : "keine Daten"}</td>
           </tr>
           <tr style={{ fontSize: "16px" }} key="PressureTotal">
             <th style={{ textAlign: "right" }}>Luftdruck (mbar):</th>
-            <td>{pressure.min !== null ? pressure.min : "keine Daten"}</td>
-            <td>{pressure.avg !== null ? pressure.avg : "keine Daten"}</td>
-            <td>{pressure.max !== null ? pressure.max : "keine Daten"}</td>
+            <td>{pressure.min != null ? pressure.min : "keine Daten"}</td>
+            <td>{pressure.avg != null ? pressure.avg : "keine Daten"}</td>
+            <td>{pressure.max != null ? pressure.max : "keine Daten"}</td>
           </tr>
         </tbody>
       </table>
@@ -142,13 +142,13 @@ const getAllData = () => {
   for (let i = 0; i <= 22; i++) {
     const stations = Station(i + 1).filter(
       (station) =>
-        station.lat &&
-        station.lon &&
-        station.temp !== null &&
-        station.humidity !== null &&
-        station.windspeed !== null &&
-        station.pressure !== null &&
-        station.time !== null
+        station.lat != null &&
+        station.lon != null &&
+        station.temp != null &&
+        station.humidity != null &&
+        station.windspeed != null &&
+        station.pressure != null &&
+        station.time != null
     );
 
     let avgTemp = getAvgValues(
@@ -170,18 +170,20 @@ const getAllData = () => {
         <th style={{ textAlign: "right" }}>
           ({i + 1}) {DistrictNameArray[i]}:{" "}
         </th>
-        <td>{avgTemp !== null ? avgTemp : "keine Daten"}</td>
-        <td>{avgHumidity !== null ? avgHumidity : "keine Daten"}</td>
-        <td>{avgWindspeed !== null ? avgWindspeed : "keine Daten"}</td>
-        <td>{avgPressure !== null ? avgPressure : "keine Daten"}</td>
+        <td>{avgTemp != null ? avgTemp : "keine Daten"}</td>
+        <td>{avgHumidity != null ? avgHumidity : "keine Daten"}</td>
+        <td>{avgWindspeed != null ? avgWindspeed : "keine Daten"}</td>
+        <td>{avgPressure != null ? avgPressure : "keine Daten"}</td>
       </tr>,
       avgTemp,
     ]);
   }
 
   // Das Array wird sortiert zurückgegeben.
-  return tableRow.sort(function (a, b) {
-    return b[1] - a[1];
+  return tableRow.sort((a, b) => {
+    const aHas = typeof a[1] !== "undefined";
+    const bHas = typeof b[1] !== "undefined";
+    return bHas - aHas || (aHas === true && b[1] - a[1]) || 0;
   });
 };
 
@@ -190,11 +192,7 @@ const getMinMaxAvgValues = (array) => {
   if (array.length !== 0) {
     min = Math.min(...array); // Minimaler Wert
     max = Math.max(...array); // Maximaler Wert
-
-    let sum = array.reduce((a, b) => a + b, 0); // Summe
-
-    /* Der Wert wird auf eine Nachkommastelle gerundet */
-    avg = parseFloat((sum / array.length || 0).toFixed(1)); // Durchschnitt
+    avg = getAvgValues(array); // Durchschnitt
   }
   return { min: min, max: max, avg: avg };
 };

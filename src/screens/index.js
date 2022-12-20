@@ -20,7 +20,7 @@ const Home = () => {
     const timer = setTimeout(() => {
       // Die Funktion setTimeOut läuft im Hintergrund.
       setDistrict("all"); // Der Bezirk wird auf "all" gesetzt (es werden alle Bezirke angezeigt)
-    }, 1000); // Nachdem 1 Sekunde vergangen ist.
+    }, 500); // Nachdem 1 Sekunde vergangen ist.
     return () => clearTimeout(timer);
   }, []);
 
