@@ -85,16 +85,58 @@ const HeatLayer = ({ map, stations }) => {
             "#DC4B42",
           ])
           .colorValue(function (d) {
+            let values = d.map((element) => parseFloat(element.o[2])); // Auslesen der Temperaturwerte
+
+            let minValue = Math.min(...values); // Minimum der Temperaturen im entsprechenden Bereich
+
+            let minHexValue = // Hexbinwertes wird jenach Minimum der Temperaturen bestimmt (Referenz nach Legende)
+              minValue < 1
+                ? 0
+                : minValue < 5
+                ? 1
+                : minValue < 10
+                ? 2
+                : minValue < 15
+                ? 3
+                : minValue < 20
+                ? 4
+                : minValue < 25
+                ? 5
+                : minValue < 30
+                ? 6
+                : minValue < 35
+                ? 7
+                : 8;
+
+            /* 
+            Werte werden angepasst, jenach Minimum des Hexbinwertes:
+
+            Rechenbeispiel für etwas heißere Temperaturen: Minimumtemperatur = 25°C
+            - => Hexbinwert = 6
+            - Iteration für Minimumwert: 25°C - 25° + 6 = 6
+            - Iteration für ein beliebiger Wert: 35°C - 25° + 6 = 16
+
+            Das heißt, dass der Hexbinwert nur mindestens 6 betragen kann
+
+            Rechenbeispiel für etwas niedrige Temperaturen: Minimumtemperatur = -5°C
+            - => Hexbinwert = 0
+            - Iteration für Minimumwert: -5°C - (-5)°C + 0 = 0
+            - Iteration für ein beliebiger Wert: -1°C - (-5)°C + 0 = 4
+
+            Das heißt, dass der Hexbinwert nur mindestens 0 betragen kann
+            */
+            let adjustedArray = values.map(
+              (element) => element - minValue + minHexValue
+            );
+
             /* Damit man eindeutig identifizieren kann, wo der höchste Wert liegt
             wird jeder Wert um 2 potenziert => exponentielle Proportion
             */
-            var sum = d.reduce(
-              (a, b) =>
-                parseFloat(b.o[2]) >= 0
-                  ? parseFloat(a) + Math.pow(parseFloat(b.o[2]), 2) // falls der Wert >= 0 ist
-                  : parseFloat(a) - Math.pow(parseFloat(b.o[2]), 2), // falls der Wert < 0 ist
+            let sum = adjustedArray.reduce(
+              (a, b) => a + Math.pow(b, 2), // falls der Wert < 0 ist
               0
             ); // Summe der Temperatur
+
             return sum / d.length || 0; // Durchschnitt
           });
 
