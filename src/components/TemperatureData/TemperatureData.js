@@ -102,7 +102,7 @@ const TemperatureData = ({ district }) => {
             <td>{windspeed.max != null ? windspeed.max : "keine Daten"}</td>
           </tr>
           <tr style={{ fontSize: "16px" }} key="PressureTotal">
-            <th style={{ textAlign: "right" }}>Luftdruck (mbar):</th>
+            <th style={{ textAlign: "right" }}>Luftdruck (hPa):</th>
             <td>{pressure.min != null ? pressure.min : "keine Daten"}</td>
             <td>{pressure.avg != null ? pressure.avg : "keine Daten"}</td>
             <td>{pressure.max != null ? pressure.max : "keine Daten"}</td>
@@ -123,7 +123,7 @@ const TemperatureData = ({ district }) => {
             <td>°C</td>
             <td>%</td>
             <td>km/h</td>
-            <td>mbar</td>
+            <td>hPa</td>
           </tr>
           {getAllData().map((tableRow) => tableRow[0])}
         </tbody>
