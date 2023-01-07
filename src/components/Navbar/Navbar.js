@@ -15,6 +15,7 @@ const Navbar = () => {
     <>
       <Nav>
         <NavMenu>
+          {/* Das Logo führt zur Startseite */}
           <NavLink to="/">
             <img src={Logo} width="80" alt="Logo"></img>
           </NavLink>

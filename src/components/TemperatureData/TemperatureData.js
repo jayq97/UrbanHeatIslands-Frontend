@@ -41,8 +41,8 @@ const Station = (district) => {
 
 // Temperatur bekommt den Bezirk als Parameter
 const TemperatureData = ({ district }) => {
-  // Stationen mit unvollständigen Werten werden herausgefiltert (.filter()) und nur die Temperaturen der Stationen geholt (.map()).
-  const stations = Station(district) // Stationen aus dem Bezirk werden geholt.
+  // Stationen mit unvollständigen Werten werden herausgefiltert (.filter())
+  const stations = Station(district)
     .filter(
       (station) =>
         district !== 0 &&
@@ -55,6 +55,7 @@ const TemperatureData = ({ district }) => {
         station.time != null
     );
 
+  //
   let temp = getMinMaxAvgValues(
     stations.map((station) => parseFloat(station.temp))
   );
@@ -134,11 +135,12 @@ const TemperatureData = ({ district }) => {
 
 export default TemperatureData;
 
-// getAllData: ALLE Wetterstationen werden geholt
+/* Daten der Wetterstationen werden geholt
+  (Temperatur, Feuchtigkeit, Windgeschwindigkeit & Luftdruck) */
 const getAllData = () => {
   let tableRow = [];
 
-  // Die for-Schleife wird 23 Mal (wegen 23 Bezirke) durchlaufen.
+  // Die for-Schleife wird 23 Mal (23 Bezirke) durchlaufen.
   for (let i = 0; i <= 22; i++) {
     const stations = Station(i + 1).filter(
       (station) =>
@@ -179,7 +181,7 @@ const getAllData = () => {
     ]);
   }
 
-  // Das Array wird sortiert zurückgegeben.
+  // Das Array wird sortiert zurückgegeben
   return tableRow.sort((a, b) => {
     const aHas = typeof a[1] !== "undefined";
     const bHas = typeof b[1] !== "undefined";
@@ -187,6 +189,7 @@ const getAllData = () => {
   });
 };
 
+// Berechnen der Minimum-, Maximum- und Durchschnittswerte
 const getMinMaxAvgValues = (array) => {
   let min, max, avg;
   if (array.length !== 0) {
@@ -197,6 +200,7 @@ const getMinMaxAvgValues = (array) => {
   return { min: min, max: max, avg: avg };
 };
 
+// Berechnen der Durchschnittswerte
 const getAvgValues = (array) => {
   let avg;
   if (array.length !== 0) {

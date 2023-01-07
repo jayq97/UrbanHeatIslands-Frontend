@@ -1,6 +1,11 @@
+// CSS
 import "./Map.css";
 
-// Leaflet React Components
+// React Components
+import { React, useState, useEffect } from "react";
+import useSwr from "swr";
+
+// React-Leaflet Components
 import {
   MapContainer,
   TileLayer,
@@ -15,11 +20,9 @@ import {
 // Leaflet Custom Components
 import Legend from "./Legend/Legend.js";
 import HeatLayer from "./HeatLayer/HeatLayer.js";
+
+// Libraries
 import * as turf from "@turf/turf";
-
-import { React, useState, useEffect } from "react";
-
-import useSwr from "swr";
 import L from "leaflet";
 
 // Gewässer GeoJSON
@@ -28,6 +31,7 @@ import Gewässer from "../../data/gewässer/Gewässer.json";
 // Grünflächen GeoJSON
 import Grünfläche from "../../data/grünflächen/Grünfläche.json";
 
+// Flächenabdeckung JSON
 import CoverageData from "../../data/areaCoverage/Flächenabdeckung.json";
 
 // Bezirke GeoJSON
@@ -161,7 +165,7 @@ const Map = ({ district }) => {
       station.time != null
   );
 
-  //GetCoverageForStation(stations, 3, map);
+  // GetCoverageForStation(stations, 3, map);
 
   return (
     <>
@@ -395,9 +399,9 @@ const renderGeoJSON = (district) => {
   var windspeedArray = []; // Array Temperatur
   var pressureArray = []; // Array Temperatur
 
-  // Für jeden Bezirk (23 Mal - 23 Bezirke) werden die Temperaturdaten geholt
+  // Für jeden Bezirk (23 Bezirke -> 23 Mal) werden die Temperaturdaten geholt
   for (var i = 0; i <= 22; i++) {
-    // Stationen aus dem Bezirk werden herausgefiltert (.filter()) und nur die Temperaturen der Stationen geholt (.map()).
+    // Stationen aus dem Bezirk werden herausgefiltert (.filter())
     const stations = Station(i + 1).filter(
       (station) =>
         district !== 0 &&
@@ -459,9 +463,11 @@ const renderGeoJSON = (district) => {
     );
   }
 
-  return <LayerGroup>{GeoJSONOutput}</LayerGroup>; // GeoJSON(s) werden zurückgegeben
+  return <LayerGroup>{GeoJSONOutput}</LayerGroup>; // Mehrere GeoJSON werden zurückgegeben
 };
 
+/* Erstellen mehrerer GeoJSON mit Minimum-, Maximum- und Durchschnittswerte
+   der Temperatur, Feuchtigkeit, Windgeschwindigkeit & Luftdruck */
 const getGeoJSONComponent = (
   tempArray,
   humidityArray,
@@ -635,6 +641,7 @@ const renderGeoJSONColor = (temp) => {
   else return "#FFFFFF"; // keine Temperatur
 };
 
+// Berechnen der Minimum-, Maximum- und Durchschnittswerte
 const getMinMaxAvgValues = (array) => {
   let min, max, avg;
   if (array.length !== 0) {
@@ -649,9 +656,14 @@ const getMinMaxAvgValues = (array) => {
   return { min: min, max: max, avg: avg };
 };
 
+/* Dient zur Generierung des JSON für Flächenabdeckungen;
+   in der Regel wird die Funktion nur einmalig ausgeführt */
 const GetCoverageForStation = (stations, radius, map) => {
   useEffect(() => {
+    // Array Umkreis der jeweiligen Wetterstation 
     let allCircles = [];
+
+    // Erstellung der Umkreise und einfügen in das Array
     stations.forEach((element) => {
       let circle = turf.circle([element.lon, element.lat], radius, {
         units: "kilometers",
@@ -661,73 +673,85 @@ const GetCoverageForStation = (stations, radius, map) => {
     });
 
     if (allCircles.length !== 0) {
+      // Array zur Speicherung von Wetterstation-ID, Wasserflächenabdeckung und Grünflächenabdeckung
       let dataArray = [];
-      allCircles.forEach((circle, index) => {
-        let greenCoverageArray = [];
-        let waterCoverageArray = [];
 
-        Grünfläche.geometry.coordinates.forEach((greenElement, index2) => {
+      // Für jeden Umkreis
+      allCircles.forEach((circle, index) => {
+        let greenCoverageArray = []; // Array Grünflächenabdeckung
+        let waterCoverageArray = []; // Array Wasserflächenabdeckung
+
+        // Für jedes Polygon der Grünflächen
+        Grünfläche.geometry.coordinates.forEach((greenElement) => {
+          // Überschneidung Umkreis und einzelnes Grünflächen-Polygon
           let intersection = turf.intersect(
             circle[1],
             turf.polygon(greenElement)
           );
+
+          // Wenn eine Überschneidung vorhanden ist
           if (intersection != null) {
-            L.geoJson(intersection, { style: { color: "green" } }).addTo(map);
+            // L.geoJson(intersection, { style: { color: "green" } }).addTo(map);
 
-            var circleArea = turf.area(circle[1]);
-            var interLayerArea = turf.area(intersection);
+            var circleArea = turf.area(circle[1]); // Fläche Umkreis
+            var interLayerArea = turf.area(intersection); // Fläche Überschneidung
 
-            // Calculate how much of intersection is covered.
-
+            // Berechnung der Abdeckung der Überschneidung im Umkreis
             var areaPercentage = interLayerArea / circleArea;
-
             greenCoverageArray.push(areaPercentage);
           }
         });
 
-        Gewässer.geometry.coordinates.forEach((waterElement, index2) => {
+        // Für jedes Polygon der Wasserflächen
+        Gewässer.geometry.coordinates.forEach((waterElement) => {
+          // Überschneidung Umkreis und einzelnes Wasserflächen-Polygon
           let intersection = turf.intersect(
             circle[1],
             turf.polygon(waterElement)
           );
+
+          // Wenn eine Überschneidung vorhanden ist
           if (intersection != null) {
-            L.geoJson(intersection, { style: { color: "blue" } }).addTo(map);
+            // L.geoJson(intersection, { style: { color: "blue" } }).addTo(map);
 
-            var circleArea = turf.area(circle[1]);
-            var interLayerArea = turf.area(intersection);
-
-            // Calculate how much of intersection is covered.
-
+            var circleArea = turf.area(circle[1]); // Fläche Umkreis
+            var interLayerArea = turf.area(intersection); // Fläche Überschneidung
+            
+            // Berechnung der Abdeckung der Überschneidung im Umkreis
             var areaPercentage = interLayerArea / circleArea;
-
             waterCoverageArray.push(areaPercentage);
           }
         });
+
         dataArray.push({
           id: circle[0],
+          // Summe der einzelnen Grünflächen-Abdeckungen
           greenCoverage: greenCoverageArray.reduce(
             (a, b) => parseFloat(a) + parseFloat(b),
             0
           ),
+          // Summe der einzelnen Grünflächen-Abdeckungen
           waterCoverage: waterCoverageArray.reduce(
             (a, b) => parseFloat(a) + parseFloat(b),
             0
           ),
         });
+
         console.log(index + "/" + allCircles.length);
       });
-      var nameOfCoverage = "Flächenabdeckung";
 
+      // JSON-Object
       var obj = {
         radius: radius,
         data: dataArray,
       };
 
+      // Erstelle ein JSON für die Flächenabdeckungen
       var FileSaver = require("file-saver");
       var blob = new Blob([JSON.stringify(obj)], {
         type: "application/json",
       });
-      FileSaver.saveAs(blob, nameOfCoverage + ".json");
+      FileSaver.saveAs(blob, "Flächenabdeckung.json");
     }
   }, [stations, radius, map]);
 };

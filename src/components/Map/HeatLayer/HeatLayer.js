@@ -14,10 +14,10 @@ const HeatLayer = ({ map, stations }) => {
       // Falls Map & Stationen vorhanden, und die HeatLayer noch nicht geladen hat
       if (map && stations && !didLoad.current) {
         // Einstellungen für die Heatlayer
-        /*const options = {
-          minOpacity: 0.2,
-          radius: 100,
-          max: 10.0,
+        var options = {
+          radius: 70,
+          opacity: 0.75,
+          duration: 400,
         };
 
         // Punkte für die Heatlayer (dabei beinhaltet diese nur die Positionen der Wetterstation und die Temperaturen)
@@ -38,33 +38,10 @@ const HeatLayer = ({ map, stations }) => {
               })
           : [];
 
-        L.heatLayer(points, options).addTo(map); // Binde die Punkte in die Heatlayer ein und dann schließlich die Heatlayer in die Heatmap*/
-
-        const points = stations
-          ? stations
-              .filter(
-                (station) =>
-                  station.lat &&
-                  station.lon &&
-                  station.temp !== null &&
-                  station.humidity !== null &&
-                  station.windspeed !== null &&
-                  station.pressure !== null &&
-                  station.time !== null
-              )
-              .map((station) => {
-                return [station.lat, station.lon, station.temp];
-              })
-          : [];
-
-        var options = {
-          radius: 70,
-          opacity: 0.75,
-          duration: 400,
-        };
-
+        // Erstellt Hexbin-Layer mit Optionen und binde diese in die Map ein
         var hexLayer = L.hexbinLayer(options).addTo(map);
 
+        // Füge Einstellungen der Radien, Farbe und Koordinatenpunkte hinzu
         hexLayer
           .radiusRange(70)
           .lng(function (d) {
@@ -140,8 +117,10 @@ const HeatLayer = ({ map, stations }) => {
             return sum / d.length || 0; // Durchschnitt
           });
 
+        // Füge Wetterstation-Daten hinzu
         hexLayer.data(points);
 
+        // Füge Bezirksgrenzen in die Map hinzu
         L.geoJSON(AlleBezirke, {
           style: {
             fillColor: "#000000",
