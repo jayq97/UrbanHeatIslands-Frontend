@@ -401,7 +401,7 @@ const renderGeoJSON = (district) => {
 
   // Für jeden Bezirk (23 Bezirke -> 23 Mal) werden die Temperaturdaten geholt
   for (var i = 0; i <= 22; i++) {
-    // Stationen aus dem Bezirk werden herausgefiltert (.filter())
+    // Stationen mit unvollständigen Werten werden herausgefiltert (.filter())
     const stations = Station(i + 1).filter(
       (station) =>
         district !== 0 &&
