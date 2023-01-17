@@ -23,12 +23,13 @@ const Navbar = () => {
           <NavLink to="/" activeStyle>
             Map
           </NavLink>
+          {/* "/weatherData" sind die Wetterdaten */}
+          <NavLink to="/weatherData" activeStyle>
+            Wetterdaten
+          </NavLink>
           {/* "/legalNotice" ist das Impressum */}
           <NavLink to="/legalNotice" activeStyle>
             Impressum
-          </NavLink>
-          <NavLink to="/weatherData" activeStyle>
-            Wetterdaten
           </NavLink>
         </NavMenu>
       </Nav>
@@ -36,9 +37,10 @@ const Navbar = () => {
       <Routes>
         {/* "/" -> Startseite */}
         <Route path="/" exact element={<Home />} />
+        {/* "/weatherData" -> Wetterdaten */}
+        <Route path="/weatherData" element={<WeatherData />} />
         {/* "/legalNotice" -> Impressum */}
         <Route path="/legalNotice" element={<LegalNotice />} />
-        <Route path="/weatherData" element={<WeatherData />} />
       </Routes>
     </>
   );

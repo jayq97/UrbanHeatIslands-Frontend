@@ -17,12 +17,12 @@ const Legend = ({ map }) => {
           "<h4>Legende (°C)</h4>" +
           "<p><i style='background-color:#DC4B42;'>⠀⠀</i>> 35</p>" +
           "<p><i style='background-color:#E37947;'>⠀⠀</i>30-35</p>" +
-          "<p><i style='background-color:#EDA84F;'>⠀⠀</i>25-30</p>" +
-          "<p><i style='background-color:#F7D65C;'>⠀⠀</i>20-25</p>" +
-          "<p><i style='background-color:#F5EE61;'>⠀⠀</i>15-20</p>" +
-          "<p><i style='background-color:#C9D968;'>⠀⠀</i>10-15</p>" +
-          "<p><i style='background-color:#75B360;'>⠀⠀</i>5-10</p>" +
-          "<p><i style='background-color:#83C18C;'>⠀⠀</i>1-5</p>" +
+          "<p><i style='background-color:#EDA84F;'>⠀⠀</i>25-29</p>" +
+          "<p><i style='background-color:#F7D65C;'>⠀⠀</i>20-24</p>" +
+          "<p><i style='background-color:#F5EE61;'>⠀⠀</i>15-19</p>" +
+          "<p><i style='background-color:#C9D968;'>⠀⠀</i>10-14</p>" +
+          "<p><i style='background-color:#75B360;'>⠀⠀</i>5-9</p>" +
+          "<p><i style='background-color:#83C18C;'>⠀⠀</i>1-4</p>" +
           "<p><i style='background-color:#8DD0F3;'>⠀⠀</i>< 1</p>";
         return div;
       };

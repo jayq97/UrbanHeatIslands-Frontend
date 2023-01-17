@@ -660,7 +660,7 @@ const getMinMaxAvgValues = (array) => {
    in der Regel wird die Funktion nur einmalig ausgeführt */
 const GetCoverageForStation = (stations, radius, map) => {
   useEffect(() => {
-    // Array Umkreis der jeweiligen Wetterstation 
+    // Array Umkreis der jeweiligen Wetterstation
     let allCircles = [];
 
     // Erstellung der Umkreise und einfügen in das Array
@@ -716,7 +716,7 @@ const GetCoverageForStation = (stations, radius, map) => {
 
             var circleArea = turf.area(circle[1]); // Fläche Umkreis
             var interLayerArea = turf.area(intersection); // Fläche Überschneidung
-            
+
             // Berechnung der Abdeckung der Überschneidung im Umkreis
             var areaPercentage = interLayerArea / circleArea;
             waterCoverageArray.push(areaPercentage);

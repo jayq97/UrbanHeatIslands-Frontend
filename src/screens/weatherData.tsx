@@ -1,6 +1,7 @@
 import React from "react";
 import useSwr from "swr";
 
+// Chart.js Komponenten
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -36,6 +37,7 @@ const Station = () => {
   return stationData && !stationError ? stationData : []; // Falls die Daten nicht vorhanden sind, wird ein leeres Array zurückgegeben
 };
 
+// Optionen für Temperatur & Feuchtigkeit Diagramm
 export const options1 = {
   responsive: true,
   interaction: {
@@ -84,6 +86,7 @@ export const options1 = {
   },
 };
 
+// Optionen für Windgeschwindigkeit & Luftdruck Diagramm
 export const options2 = {
   responsive: true,
   interaction: {
@@ -132,19 +135,20 @@ export const options2 = {
   },
 };
 
+// Einfügen der Daten in Temperatur & Feuchtigkeit Diagramm
 const Data1 = (stations: Array<any>) => {
   return {
     labels: Object.keys(stations).slice(
       Math.max(Object.keys(stations).length - 14, 1)
-    ),
+    ), // y-Achse: Kalenderdaten von den letzten 14 Tagen
     datasets: [
       {
         label: "Temperatur (°C)",
         data: Object.values(groupAverageData(stations, "temp")).slice(
           Math.max(Object.values(stations).length - 14, 1)
-        ),
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        ), // x-Achse: Durchschnitts-Temperatur von den letzten 14 Tagen
+        borderColor: "rgb(255, 99, 132)", // Rot
+        backgroundColor: "rgba(255, 99, 132, 0.5)", // Rot
         yAxisID: "y",
         tension: 0.5,
       },
@@ -152,9 +156,9 @@ const Data1 = (stations: Array<any>) => {
         label: "Feuchtigkeit (%)",
         data: Object.values(groupAverageData(stations, "humidity")).slice(
           Math.max(Object.values(stations).length - 14, 1)
-        ),
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
+        ), // x-Achse: Durchschnitts-Feuchtigkeit von den letzten 14 Tagen
+        borderColor: "rgb(53, 162, 235)", // Blau
+        backgroundColor: "rgba(53, 162, 235, 0.5)", // Blau
         yAxisID: "y1",
         tension: 0.5,
       },
@@ -162,19 +166,20 @@ const Data1 = (stations: Array<any>) => {
   };
 };
 
+// Einfügen der Daten in Windgeschwindigkeit & Luftdruck Diagramm
 const Data2 = (stations: Array<any>) => {
   return {
     labels: Object.keys(stations).slice(
       Math.max(Object.keys(stations).length - 14, 1)
-    ),
+    ), // y-Achse: Kalenderdaten von den letzten 14 Tagen
     datasets: [
       {
         label: "Windgeschwindigkeit (km/h)",
         data: Object.values(groupAverageData(stations, "windspeed")).slice(
           Math.max(Object.values(stations).length - 14, 1)
-        ),
-        borderColor: "rgb(255, 206, 86)",
-        backgroundColor: "rgba(255, 206, 86, 0.5)",
+        ), // x-Achse: Durchschnitts-Windgeschwindigkeit von den letzten 14 Tagen
+        borderColor: "rgb(255, 206, 86)", // Gelb
+        backgroundColor: "rgba(255, 206, 86, 0.5)", // Gelb
         yAxisID: "y2",
         tension: 0.5,
       },
@@ -182,9 +187,9 @@ const Data2 = (stations: Array<any>) => {
         label: "Luftdruck (hPa)",
         data: Object.values(groupAverageData(stations, "pressure")).slice(
           Math.max(Object.values(stations).length - 14, 1)
-        ),
-        borderColor: "rgb(75, 192, 192)",
-        backgroundColor: "rgba(75, 192, 192, 0.5)",
+        ), // x-Achse: Durchschnitts-Luftdruck von den letzten 14 Tagen
+        borderColor: "rgb(75, 192, 192)", // Grün
+        backgroundColor: "rgba(75, 192, 192, 0.5)", // Grün
         yAxisID: "y3",
         tension: 0.5,
       },
@@ -192,9 +197,11 @@ const Data2 = (stations: Array<any>) => {
   };
 };
 
+// Gruppieren der Daten nach Kalenderdaten
 const groupData = (array: any) => {
   return array.reduce((memo: any, item: any) => {
     if (!memo[item.timeString]) {
+      // Array-Element für Kalenderdatum
       memo[item.timeString] = {
         temp: 0,
         humidity: 0,
@@ -204,15 +211,16 @@ const groupData = (array: any) => {
       };
     }
 
-    memo[item.timeString].temp += Number(item.temp);
-    memo[item.timeString].humidity += Number(item.humidity);
-    memo[item.timeString].windspeed += Number(item.windspeed);
-    memo[item.timeString].pressure += Number(item.pressure);
-    memo[item.timeString].count += 1;
+    memo[item.timeString].temp += Number(item.temp); // Summe der Temperaturen im entsprechenden Kalenderdatum
+    memo[item.timeString].humidity += Number(item.humidity); // Summe der Feuchtigkeiten im entsprechenden Kalenderdatum
+    memo[item.timeString].windspeed += Number(item.windspeed); // Summe der Windgeschwindigkeiten im entsprechenden Kalenderdatum
+    memo[item.timeString].pressure += Number(item.pressure); // Summe der Luftdruck im entsprechenden Kalenderdatum
+    memo[item.timeString].count += 1; // Anzahl der Daten im entsprechenden Kalenderdatum
     return memo;
   }, {});
 };
 
+// Durchschnitt der jeweiligen Daten im Kalenderdatum
 const groupAverageData = (array: any, element: any) => {
   return Object.keys(array).reduce(function (memo: any, key: any) {
     if (element === "temp") {
@@ -228,13 +236,16 @@ const groupAverageData = (array: any, element: any) => {
   }, {});
 };
 
+// Erstellen des Datums im eigenen Format
 const timeStringFunction = (time: any) => {
   var date = new Date(time);
-  var dd = date.getDate();
-  var mm = date.getMonth() + 1;
+  var dd = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+  var mm =
+    date.getMonth() + 1 < 10
+      ? "0" + Number(date.getMonth() + 1)
+      : date.getMonth() + 1;
   var yyyy = date.getFullYear();
-  var hh = date.getHours();
-  return dd + "." + mm + "." + yyyy;
+  return dd + "." + mm + "." + yyyy; // z.B. 31.01.2023
 };
 
 const WeatherData = () => {
@@ -249,13 +260,13 @@ const WeatherData = () => {
     )
     .sort(function (a: any, b: any) {
       return a.time.localeCompare(b.time);
-    })
+    }) // Sortieren nach Datum
     .map((obj: any) => ({
       ...obj,
       timeString: timeStringFunction(obj.time),
-    }));
+    })); // Hinzufügen des Datums im eigenen Format
 
-  let array = groupData(stations);
+  let array = groupData(stations); // Gruppieren der Daten
 
   return (
     <div
