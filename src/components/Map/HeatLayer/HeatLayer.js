@@ -103,7 +103,10 @@ const HeatLayer = ({ map, stations }) => {
             Das heißt, dass der Hexbinwert nur mindestens 0 betragen kann
             */
             let adjustedArray = values.map(
-              (element) => element - minValue + minHexValue
+              (element) =>
+                minValue >= 0
+                  ? element - minValue + minHexValue // wenn minValue positiv ist
+                  : element + minValue + minHexValue // wenn minValue negativ ist
             );
 
             /* Damit man eindeutig identifizieren kann, wo der höchste Wert liegt
