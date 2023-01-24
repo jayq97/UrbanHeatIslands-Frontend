@@ -175,7 +175,7 @@ const Map = ({ district }) => {
             <th>
               {/* Die normale Map */}
               <MapContainer
-                center={[48.210033, 16.363449]}
+                center={[48.220033, 16.383449]}
                 zoom={12}
                 scrollWheelZoom={true}
                 ref={(ref) => {
@@ -354,10 +354,11 @@ const Map = ({ district }) => {
             <th>
               {/* Die Heatmap */}
               <MapContainer
-                center={[48.210033, 16.363449]}
+                center={[48.220033, 16.383449]}
                 zoom={12}
-                minZoom={11}
+                minZoom={12}
                 maxZoom={12}
+                dragging={false}
                 scrollWheelZoom={true}
                 ref={(ref) => {
                   setMap2(ref);
