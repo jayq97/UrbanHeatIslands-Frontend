@@ -42,18 +42,17 @@ const Station = (district) => {
 // Temperatur bekommt den Bezirk als Parameter
 const TemperatureData = ({ district }) => {
   // Stationen mit unvollständigen Werten werden herausgefiltert (.filter())
-  const stations = Station(district)
-    .filter(
-      (station) =>
-        district !== 0 &&
-        station.lat != null &&
-        station.lon != null &&
-        station.temp != null &&
-        station.humidity != null &&
-        station.windspeed != null &&
-        station.pressure != null &&
-        station.time != null
-    );
+  const stations = Station(district).filter(
+    (station) =>
+      district !== 0 &&
+      station.lat != null &&
+      station.lon != null &&
+      station.temp != null &&
+      station.humidity != null &&
+      station.windspeed != null &&
+      station.pressure != null &&
+      station.time != null
+  );
 
   //
   let temp = getMinMaxAvgValues(
